@@ -1,4 +1,5 @@
 import os
+import uuid
 
 DEBUG = True
 
@@ -10,12 +11,14 @@ WHOOSH = {
 TORNADO_APP_CONFIG = {
     'compress_response': True,
 
+    'cookie_secret': 'secrets~!', # uuid.uuid4().hex,
+    'login_url': '/login',
+    'xsrf_cookies': True,
+
     # templates
     'compiled_template_cache': not DEBUG,
     'template_path': 'templates',
 
     # static files
     'static_hash_cache': not DEBUG,
-    'static_path': 'static',
-    'static_url_prefix': '/static/'
 }

@@ -3,6 +3,7 @@ import os
 from uuid import uuid4
 
 from tornado import gen
+from whoosh.query import Query
 from whoosh.analysis import StemmingAnalyzer, StopFilter
 from whoosh.fields import *
 from whoosh.index import create_in, exists_in, open_dir
@@ -26,7 +27,7 @@ class WinterSchema(SchemaClass):
 
 def get_default_schema(uuid=None):
     if uuid is None:
-        uuid = int(str(uuid4().int)[:16])
+        uuid = int(str(uuid4().int)[:6])
 
     return {
         'uuid': int(uuid) ,
@@ -82,12 +83,35 @@ def write_index(idx, **fields):
         writer = idx.writer()
         writer.add_document(**fields)
         writer.commit()
+
     except Exception as e:
         success = False
         print(e)
 
     return success
 
+@gen.coroutine
+def update_index(idx, **fields):
+    deleted = True
 
-def search_index(index):
-    return "search"
+    try:
+        writer = idx.writer()
+
+        if fields.get('title') in ['', None]:
+            # delete the document
+            writer.delete_by_term('uuid', fields.get('uuid'))
+        else:
+            # update the title with all the
+            # new field attributes ~ this will first
+            # search for all fields that contain a `unique` flag,
+            # and then update everything else that's included.
+            writer.update_document(**fields)
+            deleted = False
+
+        # commit the change to disk
+        writer.commit()
+
+    except Exception as e:
+        print(e)
+
+    return deleted

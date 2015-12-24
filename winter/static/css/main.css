@@ -30,20 +30,44 @@ div.header #logo {
 div.footer {
     position: absolute;
     bottom: 0;
-    height: 8em;
+    height: 12em;
     width: 100%;
     margin-top: 3em;
     background-color: #644D52;
     border-bottom: solid 30px #332532;
 }
 
+div.footer a {
+    color: #231722;
+    text-decoration: none;
+}
+
+div.footer a:hover {
+    color: #876f74;
+    text-decoration: dashed;
+}
+
 div.footer-inner {
     padding: 1em;
 }
 
+div.footer-inner ul {
+    list-style: none;
+}
+
+div.footer-inner ul > li {
+    line-height: 1.5em;
+}
+
+div.footer-inner ul > li:before {
+    content: '-'; /* en dash */
+    position: absolute;
+    margin-left: -1em;
+}
+
 div.content {
     margin-top: 3em;
-    padding-bottom: 11em; /* height of the footer + margin */
+    padding-bottom: 15em; /* height of the footer + margin */
 }
 
 a.pure-menu-link:hover {
@@ -74,4 +98,106 @@ a.pure-menu-link {
 
 a:hover {
     color: #FF974F;
+}
+
+div.legendary {
+    color: #332532;
+    font-size: 115%;
+    width: 75%;
+    border-bottom: 1px dashed black;
+    margin-bottom: 0.75em;
+}
+
+div.error-box {
+    border-radius: 5px;
+    background-color: rgba(255, 31, 73, 0.18);
+    border: solid 1px rgb(255, 31, 73);
+    max-width: 320px;
+    padding: 1em;
+}
+
+div.error-box .message {
+    margin-left: 1em;
+}
+
+div.error-box .oi {
+    color: rgb(193, 27, 56);
+}
+
+div.pad-me {
+    padding: 3em;
+}
+
+.right-floater {
+    float: right;
+}
+
+.post {
+    margin-bottom: 3em;
+}
+
+.post-body {
+    padding-left: 3em;
+    padding-top: 1.5em;
+    font-size: 125%;
+}
+
+.post-title {
+    font-size: 175%;
+}
+
+.post-title a {
+    color: black;
+    text-decoration: none;
+}
+
+.post-keywords {
+    margin-left: 3em;
+    padding-left: 2em;
+    border-left: solid 3px #644D52;
+}
+
+.post-keywords span {
+    padding-right: 1em;
+}
+
+.post-summary {
+    font-style: italic;
+    margin-left: 3em;
+    padding-left: 2em;
+    border-left: solid 3px #bb9fa4;
+}
+
+.post-summary .text {
+    padding-right: 1em;
+}
+
+.post-section {
+    padding-bottom: 0.75em;
+}
+
+.post-section .section-header {
+    padding-bottom: 0.6em;
+}
+
+.post-section .section-header .oi {
+    padding-right: 0.5em;
+}
+
+.post-section p.post-content {
+    font-size: 120%;
+}
+
+.air-quote {
+    font-size: 200%;
+}
+
+.quote-right {
+    text-align: right;
+    vertical-align: bottom;
+}
+
+a.button-xs {
+    color: black;
+    font-size: 70%;
 }

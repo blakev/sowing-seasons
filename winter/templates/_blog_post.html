@@ -1,0 +1,32 @@
+<div class="legendary">
+    <h2>{{ post['title'] }}</h2>
+
+    Last modified: {{ post['modified'].strftime('%m-%d-%Y') }}, Blake VandeMerwe
+</div>
+
+
+<div class="post-section">
+    <div class="section-header">
+        <span class="oi" data-glyph="tag"></span> Tags
+    </div>
+    <div class="post-keywords">
+        {% for kw in post['keywords'].split() %}
+        <a href="#" class="button-xs pure-button">{{ kw.strip(', ') }}</a>
+        {% end %}
+    </div>
+</div>
+
+<div class="post-section">
+    <div class="section-header">
+        <span class="oi" data-glyph="info"></span> Summary
+    </div>
+    <div class="post-summary">
+        {{ post['summary'] }}
+    </div>
+</div>
+
+<div class="post-section">
+    <p class="post-content">
+       {{ post['content'] }}
+    </p>
+</div>

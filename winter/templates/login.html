@@ -1,0 +1,49 @@
+{% extends "_base.html" %}
+
+{% block content %}
+<form action="/login" method="post" class="pure-form pure-form-aligned">
+    {% module xsrf_form_html() %}
+
+    <fieldset>
+        <legend>
+            Identify yourself!
+        </legend>
+
+        <div class="pure-control-group">
+            {% if error %}
+                <div class="error-box">
+                    <span class="oi" data-glyph="circle-x"></span>
+                    <span class="message">
+                        {{ error }}
+                    </span>
+                </div>
+            {% end %}
+        </div>
+
+        <div class="pure-control-group">
+            <label for="username">Username</label>
+            <input type="text" id="name" placeholder="Name?" name="username">
+        </div>
+
+        <div class="pure-control-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="my password?" name="password">
+        </div>
+
+        <div class="pure-control-group">
+            <label for="auth">Auth Token</label>
+            <input type="password" id="auth" placeholder="..where was that.." name="auth_key" required>
+        </div>
+
+        <div class="pure-controls">
+            <button type="submit" class="pure-button">
+                <span class="oi" data-glyph="account-login"></span>
+                Login
+            </button>
+        </div>
+    </fieldset>
+</form>
+
+
+
+{% end %}
