@@ -20,26 +20,15 @@
                 </a>
             </div>
             {{ post['modified'].strftime('%h %d-%Y') }}, {{ post.get('author', 'Blake') }}
+
             <div class="post-body">
-                <div class="post-keywords">
-                    <span class="oi" data-glyph="tag"></span>
-                    {% for kw in post['keywords'].split() %}
-                        <a href="#" class="button-xs pure-button">{{ kw.strip(', ') }}</a>
-                    {% end %}
-                </div>
-                <div class="pure-g">
-                    <div class="pure-u-1-4">
-                        <span class="oi" data-glyph="double-quote-serif-left"></span>
-                    </div>
-                    <div class="pure-u-3-4 text post-summary">
-                        <p>{{ post['summary'] }}</p>
-                        <div class="air-quote quote-right">
-                            <a href="#">
-                                <span class="oi" data-glyph="double-quote-serif-right"></span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
+                <span class="oi icon-push" data-glyph="tag"></span>
+                {% for kw in sorted(post['keywords'].split()) %}
+                    <a href="#" class="button-xs pure-button">{{ kw.strip(', ') }}</a>
+                {% end %}
+
+                <p>{{ post['summary'] }}</p>
+
             </div>
         </div>
     {% end %}

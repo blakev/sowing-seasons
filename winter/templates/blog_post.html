@@ -8,6 +8,8 @@
     {% if not exists %}
         {% include "_blog_post_missing.html" %}
     {% else %}
-        {% include "_blog_post.html" %}
+        <div class="post-content">
+            {% include "_blog_post.html" %}
+        </div>
     {% end %}
 {% end %}
