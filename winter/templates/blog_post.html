@@ -8,7 +8,6 @@
     {% if not exists %}
         {% include "_blog_post_missing.html" %}
     {% else %}
-        {% set post = posts['results'][0] %}
         {% include "_blog_post.html" %}
     {% end %}
 {% end %}

@@ -1,6 +1,8 @@
 import os
 import uuid
 
+from winter.utils import uimodules
+
 DEBUG = True
 
 WHOOSH = {
@@ -18,6 +20,7 @@ TORNADO_APP_CONFIG = {
     # templates
     'compiled_template_cache': not DEBUG,
     'template_path': 'templates',
+    'ui_modules': uimodules,
 
     # static files
     'static_hash_cache': not DEBUG,

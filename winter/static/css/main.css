@@ -27,7 +27,12 @@ div.header #logo {
     padding-right: 0.75em;
 }
 
+div.header .far-right {
+    padding-right: 1em;
+}
+
 div.footer {
+    color: #332532;
     position: absolute;
     bottom: 0;
     height: 12em;
