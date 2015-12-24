@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>SowingSeasons{% block title %}{% end %}</title>
+
+    <link rel="stylesheet" href="static/css/vendor/normalize.css">
+    <link rel="stylesheet" href="static/css/vendor/pure-min.css">
+    <link rel="stylesheet" href="static/css/open-iconic.min.css">
+    <link rel="stylesheet" href="static/css/main.css">
+
+    <!--[if lte IE 8]><link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-old-ie-min.css"><![endif]-->
+    <!--[if gt IE 8]><!-->
+        <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-min.css">
+    <!--<![endif]-->
+
+
+</head>
+<body>
+
+<div class="page-container">
+
+<div class="header">
+    <div class="pure-g">
+        <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-2-5">
+            <div class="pure-menu pure-menu-horizontal">
+                <ul class="pure-menu-list">
+                    <li class="pure-menu-item"><a href="/" class="pure-menu-link">Home</a></li>
+                    <li class="pure-menu-item"><a href="#" class="pure-menu-link">Profile</a></li>
+                    <li class="pure-menu-item"><a href="#" class="pure-menu-link">About</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-5">
+            <img id="logo" src="/static/img/logo.png" alt="SowingSeasons: takes awhile to grow anything.">
+        </div>
+        <div class="pure-u-1 pure-u-sm-1 pure-u-md-2-5">
+            <div class="text-right text-middle">
+                <form action="" class="pure-form">
+                    <input class="input menu-icon-right" type="text" placeholder="I'm looking for...">
+                    <button class="pure-button">
+                        <span class="oi" data-glyph="magnifying-glass"></span>
+                        Search
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="content">
+    <div class="pure-g">
+        <div class="pure-u-md-1-5"></div>
+            <div class="pure-u-1 pure-u-md-3-5">
+                {% block content %}
+
+                {% end %}
+            </div>
+        <div class="pure-u-md-1-5"></div>
+    </div>
+</div>
+
+<div class="footer">
+    <div class="footer-inner">
+        {% include "_footer.html" %}
+    </div>
+</div>
+
+</div>
+
+</body>
+</html>

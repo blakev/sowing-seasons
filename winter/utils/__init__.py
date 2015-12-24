@@ -1,3 +1,11 @@
+import datetime
+
+datetime_encode = lambda o: (
+    o.isoformat()
+    if isinstance(o, datetime.datetime)
+    or isinstance(o, datetime.date)
+    else None
+)
 
 class DotDict(dict):
     """dot.notation access to dictionary attributes"""

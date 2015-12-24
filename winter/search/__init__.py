@@ -1,5 +1,8 @@
+import datetime
 import os
+from uuid import uuid4
 
+from tornado import gen
 from whoosh.analysis import StemmingAnalyzer, StopFilter
 from whoosh.fields import *
 from whoosh.index import create_in, exists_in, open_dir
@@ -10,15 +13,29 @@ class WinterSchema(SchemaClass):
     uuid = NUMERIC(
         unique=True, stored=True, numtype=int, bits=64, signed=False)
 
+    modified = DATETIME(stored=True, sortable=True)
     statics = ID(stored=True)
+
     title = TEXT(stored=True, field_boost=1.4, sortable=True)
     keywords = KEYWORD(stored=True, lowercase=True, commas=True, field_boost=1.2)
     summary = TEXT(stored=True, spelling=True, phrase=True, field_boost=1.1)
     content = TEXT(
             stored=True, spelling=True, phrase=True, field_boost=0.9,
             analyzer=StemmingAnalyzer(
-                minsize=5, stoplist=IGNORE_WORDS, cachesize=1024*64) | StopFilter())
+                minsize=4, stoplist=IGNORE_WORDS, cachesize=1024*64) | StopFilter())
 
+def get_default_schema(uuid=None):
+    if uuid is None:
+        uuid = int(str(uuid4().int)[:16])
+
+    return {
+        'uuid': int(uuid) ,
+        'modified': datetime.datetime.utcnow(),
+        'statics': None,
+        'title': None,
+        'keywords': None,
+        'summary': None,
+        'content': None }
 
 def obtain_index(location, schema, index_name, force_new_index=False, read_only=False):
     """Returns, or creates a new, whoosh search index.
@@ -57,13 +74,20 @@ def obtain_index(location, schema, index_name, force_new_index=False, read_only=
     return index
 
 
-async def read_index(index):
-    return "read"
+@gen.coroutine
+def write_index(idx, **fields):
+    success = True
+
+    try:
+        writer = idx.writer()
+        writer.add_document(**fields)
+        writer.commit()
+    except Exception as e:
+        success = False
+        print(e)
+
+    return success
 
 
-async def write_index(index):
-    return "Write"
-
-
-async def search_index(index):
+def search_index(index):
     return "search"

@@ -1,6 +1,9 @@
-from tornado.web import Application
+import os
+
+from tornado.web import Application, StaticFileHandler, url
 
 from winter.search import obtain_index, WinterSchema
+from winter.search.handlers import SearchHandler
 from winter.settings.default import TORNADO_APP_CONFIG, WHOOSH
 from winter.utils import DotDict
 from winter.views import MainHandler
@@ -11,10 +14,14 @@ WHOOSH = DotDict(WHOOSH)
 
 def make_app(**settings):
 
+    static_path = os.path.join(os.getcwd(), 'static')
+
     # initialize the main application
     app = Application([
 
-        (r'/', MainHandler)
+        url(r'/', MainHandler, name='index'),
+        url(r'/search/', SearchHandler, name='search'),
+        url(r'/static/(.*)', StaticFileHandler, {'path': static_path})
 
     ], **settings)
 
