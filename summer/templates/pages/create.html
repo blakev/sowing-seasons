@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SowingSeasons: Blog Post</title>
+
+    {% include "base/_styles.html" %}
+</head>
+<body>
+
+<br><br>
+
+<div class="container row">
+    <div class="col-sm-4">
+        <a href="/">Home</a>
+        <hr>
+        <ul>
+        {% if all_posts %}
+            {% for result in all_posts %}
+                {% set display = '[' ~ result.uuid ~ ']' if result.title is none else result.title %}
+                <li>
+                    {{ result.modified.strftime('%m-%d, %Y') }}
+                    <br>
+                    <a href="/admin/create?post_id={{ result.uuid }}">{{ display }}</a>
+                </li>
+            {% endfor %}
+        {% endif %}
+        </ul>
+        <hr>
+        <a href="/admin/create" class="btn btn-info">
+            <i class="fa fa-plus icon-left"></i>
+            New Document
+        </a>
+    </div>
+
+    <div class="col-sm-8">
+        <form action="/admin/create" method="post" class="form">
+            {{ csrf }}
+
+            {% if not new_doc %}
+                <input type="hidden" name="post_id" value="{{ post.uuid }}">
+            {% endif %}
+
+            <fieldset>
+                <legend>
+                    {% if new_doc %}
+                        New Document
+                    {% else %}
+                        Editing document: <strong>{{ post.title }}</strong>
+                    {% endif %}
+                </legend>
+
+                {% if not new_doc %}
+                    Modified: {{ post.modified }}
+                    <br><br>
+                {% endif %}
+
+                {% for field in form %}
+                    <div class="form-group">
+                        {{ field.label(class="control-label") }}
+                        {{ field(class="form-control") }}
+                    </div>
+                {% endfor %}
+
+                <div class="form-group pull-right">
+                    <button type="submit" class="btn btn-success">
+                        <i class="fa fa-pencil icon-left"></i>
+                        {{ 'Submit' if new_doc else 'Update' }}
+                    </button>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

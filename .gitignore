@@ -2,7 +2,7 @@
 .idea/
 .idea/*
 winter/settings/auth_key
-
+summer/auth_credentials
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SowingSeasons: Login</title>
+
+    {% include "base/_styles.html" %}
+</head>
+<body>
+
+<br><br>
+
+<div class="row">
+    <div class="col-sm-offset-8 col-sm-3">
+        <div class="well">
+            <form action="/login" method="post">
+                {{ csrf }}
+
+                <fieldset>
+                    <legend>
+                        Identification
+                    </legend>
+
+                    {% if form.errors %}
+                        <div class="alert alert-warning">
+                            {% for err_type, message in form.errors.items() %}
+                                <strong>{{ err_type|capitalize}}</strong>: {{ message }}<br>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <div class="form-group">
+                        <label for="username" class="control-label">Username</label>
+                        <input type="text" id="username" name="username" class="form-control">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password" class="control-label">Password</label>
+                        <input type="password" id="password" name="password" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="auth_token" class="control-label">Authentication Token</label>
+                        <input type="password" id="auth" name="auth_token" class="form-control" required>
+                    </div>
+                </fieldset>
+
+                <div class="form-group pull-right">
+                    <button type="submit" class="btn btn-default">
+                        <i class="fa fa-sign-in icon-left"></i> Login
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

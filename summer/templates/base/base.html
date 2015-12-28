@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="{{ seo.description }}">
+    <meta name="keywords" content="{{ seo.keywords }}">
+    <meta name="author" content="{{ seo.author }}">
+
+    <!-- google meta -->
+    <link rel="author" href="https://plus.google.com/{{ seo.google.author_id }}">
+
+    <!-- facebook meta -->
+    <meta property="og:title" content="{{ post.title if post is defined else seo.title }}">
+    <meta property="og:type" content="{% if post is defined %}article{% else %}blog{% endif %}">
+
+    <!-- twitter meta -->
+    <meta name=”twitter:card” content=”summary”>
+    <meta name=”twitter:url” content=”{{ this_url }}”>
+    <meta name=”twitter:description” content=”{{ post.description if post is defined else seo.description }}”>
+
+    {% if post is defined %}
+        <meta name="twitter:image" content="{{ post.img }}">
+        <meta property="og:image" content="{{ post.img }}">
+    {% endif %}
+
+    <title>{% block title %}{% endblock %}</title>
+
+    {% include "base/_styles.html" %}
+</head>
+<body>
+    {% block content %}
+    {% endblock %}
+</body>
+</html>
