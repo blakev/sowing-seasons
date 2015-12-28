@@ -1,14 +1,14 @@
 from tornado import gen
+from whoosh.query import Every
 
-from summer.ext.search.queries import get_all_documents
+from summer.ext.search.queries import get_all_documents, generic
 from summer.forms.user import LoginForm
 from summer.handlers import BaseHandler
-from summer.handlers.create import AdminCreateHandler
 
 class IndexHandler(BaseHandler):
     @gen.coroutine
     def get(self):
-        posts = yield get_all_documents(self.meta.search_index, limit=10)
+        posts = yield generic(self.meta.search_index, q=Every())
         return self.render_html('pages/index.html', posts=posts)
 
 

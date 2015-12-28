@@ -27,7 +27,7 @@ def get_related(idx, by_id=None):
 
 
 @gen.coroutine
-def generic(idx, qs=None, q=None, page=1, limit=10):
+def generic(idx, qs=None, q=None, limit=10):
     if qs is q is None:
         raise ValueError('cannot have a null querystring and query')
 
@@ -48,7 +48,7 @@ def generic(idx, qs=None, q=None, page=1, limit=10):
         facet.add_score()
         facet.add_field('title')
 
-        results = search.search_page(query, page, sortedby=facet, limit=limit)
+        results = search.search(query, sortedby=facet, limit=limit)
 
         metadata.search_time = results.runtime
         metadata.qs = qs

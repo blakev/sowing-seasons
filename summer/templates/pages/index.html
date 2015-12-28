@@ -4,6 +4,15 @@
 SowingSeasons
 {% endblock %}
 
+{% block navigation %}
+    <h3>Newest Posts</h3>
+    <ul>
+    {% for post in posts.results %}
+        <li>{{ post.title }}</li>
+    {% endfor %}
+    </ul>
+{% endblock %}
+
 {% block content %}
-    {{ seo }}
+    {{ posts }}
 {% endblock %}
