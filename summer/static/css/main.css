@@ -1,44 +1,100 @@
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 body {
+    font-size: 1.6em;
   /* Margin bottom by footer height */
-  margin-bottom: 200px;
+  margin-bottom: 350px;
 }
+
+div.main-content {
+
+}
+
+div.main-content h2.title {
+    border-bottom: dashed 1px #232323;
+}
+
+div.post-content {
+    padding-top: 2em;
+    padding-bottom: 2em;
+    border-top: dashed 1px #a1a1a1;
+    border-bottom: dashed 1px #a1a1a1;
+}
+
+div.post-link-header {
+    border-bottom: dashed 1px #a1a1a1;
+}
+
+div.post-link-footer {
+    padding-bottom: 1em;
+}
+
 pre {
     background-color: #232323;
 }
 
+p em.quote {
+    display: block;
+    padding-top: 0.5em;
+    padding-left: 3em;
+    padding-right: 1em;
+    font-size: 90%;
+}
+
+p.post-summary {
+    font-size: 110%;
+}
+
+.custom-navbar-brand {
+    float: left;
+    font-size: 18px;
+    padding-top: 24px;
+}
+
 .footer {
+    padding-top: 1em;
     position: absolute;
     bottom: 0;
     width: 100%;
     /* Set the fixed height of the footer here */
-    height: 200px;
+    min-height: 350px;
     color: #dddddd;
-    background-image: url('/static/img/zwartevilt.png');
+    background: #131313 url('/static/img/zwartevilt.png');
+}
+
+.footer-logo {
+    margin-bottom: -14px;
+}
+
+.logo-badge {
+    padding: 5px;
+    height: 48px;
+}
+
+.logo-badge-width {
+    padding: 5px;
+    width: 128px;
 }
 
 .core-background {
-    min-height: 8em;
-    background-image: url('/static/img/zwartevilt.png');
-    margin-bottom: 2em;
+    min-height: 5em;
+    background: #131313 url('/static/img/zwartevilt.png');
 }
 
-i.icon-left {
+.icon-left {
     padding-right: 0.75em;
 }
 
-i.icon-right {
+.icon-right {
     padding-left: 0.75em;
 }
 
 .core-background img {
     display: inline;
     max-height: 32px;
-    float: right;
-    margin-right: 32px;
+    margin-left: 32px;
     margin-top: -8px;
 }
 
@@ -48,13 +104,20 @@ i.icon-right {
 }
 
 .page-spacer {
-    height: 6em;
+    height: 6.5em;
 }
 
 .odd-result {
-    background-color: #f2f2f2;
+    padding: 0.5em 1em;
+    background-color: transparent;
+    border-right: 3px solid #373737;
 }
 
 .even-result {
-    background-color: #cacaca;
+    padding: 0.5em 1em;
+    background-color: #f8f8f8;
+}
+
+.meta-list {
+    color: #3B403B;
 }

@@ -1,25 +1,37 @@
 {% extends "base/base.html" %}
-{% from "base/_macros.html" import post_link %}
+{% from "base/_macros.html" import post_link, render_navigation %}
 
 {% block title %}
-	 : SowingSeasons
+	 {{ term }} - Search : SowingSeasons
 {% endblock %}
 
 {% block content %}
-<h2>Search Results</h2>
+    <ol class="breadcrumb">
+        <li><a href="/">Home</a></li>
+		<li><a href="/search">Search Results</a></li>
+		<li>{{ term }}</li>
+    </ol>
 
-<hr>
-<div class="text-right">
-	Took: {{ results.search_time }}s to find <strong>{{ results.count }}</strong> results.
-	<br>
-	Query: <i>{{ results.query }}</i>
-	<br>
-	<br>
-</div>
+	<h2>
+		Search Results
+		<br>
+		<small>
+            Query: <i>{{ results.query }}</i>
+            <br>
+            <small>
+                Took: {{ results.search_time }}s to find <strong>{{ results.count }}</strong> results.
+            </small>
+        </small>
+	</h2>
 
-{% for post in results.results %}
-	{% set bgclass = loop.cycle('odd-result', 'even-result') %}
-	{{ post_link(post, bgclass) }}
-{% endfor %}
+	<ul>
+	{% for post in results.results %}
+		{% set bgclass = loop.cycle('odd-result', 'even-result') %}
+		{{ post_link(post, bgclass) }}
+	{% endfor %}
+	</ul>
+{% endblock %}
 
+{% block navigation %}
+    {{ render_navigation(keywords, topics) }}
 {% endblock %}

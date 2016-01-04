@@ -1,35 +1,25 @@
 {% extends "base/base.html" %}
-{% from "base/_macros.html" import post_link %}
+{% from "base/_macros.html" import post_link, render_navigation %}
 
 {% block title %}
-SowingSeasons
-{% endblock %}
-
-{% block navigation %}
-    <h3>Topics</h3>
-    <ul class="list-unstyled">
-    {% for topic in topics %}
-        <li class="text-capitalize">
-            <a href="/search/topic/{{ topic }}">{{ topic }}</a>
-        </li>
-    {% endfor %}
-    </ul>
-    <h3>Keywords</h3>
-    <ul class="list-unstyled">
-    {% for kw, count in keywords %}
-        <li>
-            <a href="/search/keywords/{{ kw }}">{{ kw }}</a>
-            ( <em>{{ count }}</em> )
-        </li>
-    {% endfor %}
-    </ul>
+    Home : SowingSeasons
 {% endblock %}
 
 {% block content %}
-    <h3>Newest Posts</h3>
+    <ol class="breadcrumb">
+        <li><a href="/">Home</a></li>
+    </ol>
+
+    <h2>Newest Posts</h2>
     <ul>
     {% for post in posts.results %}
-        {{ post_link(post) }}
+        {% set bgclass = loop.cycle('odd-result', 'even-result') %}
+        {{ post_link(post, bgclass) }}
     {% endfor %}
     </ul>
 {% endblock %}
+
+{% block navigation %}
+    {{ render_navigation(keywords, topics) }}
+{% endblock %}
+

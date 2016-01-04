@@ -20,12 +20,15 @@ SEO_VALUES = {
         'author_id': '+BlakeVandeMerwe'
     },
 
-    'img': r'/static/img/profile.jpg'
+    'img': r'/static/img/profile.jpg',
+    'referral': {
+        'digital_ocean': 'https://www.digitalocean.com/?refcode=70ebeb6d7781'
+    }
 }
 
 TORNADO_CONFIG = {
+    'debug': DEBUG,
     'compress_response': True,
-    'login_url': '/login',
 
     'cookie_secret': CSRF_SECRET,
     'login_url': '/login',

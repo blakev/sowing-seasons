@@ -13,7 +13,7 @@ class StaticSearchHandler(BaseHandler):
         idx = self.meta.search_index
 
         # clean up the subject and search value from the url bar
-        subject, value = subject.split()[0], value.strip()
+        subject, value = subject.split()[0], value.strip(' /')
 
         # build the query string we'll pass to the QueryParser
         q = '%s:%s' % (subject, value)
@@ -24,5 +24,9 @@ class StaticSearchHandler(BaseHandler):
         # get our results, in a clean format for display
         results = yield generic(idx, qs=q, parser=parser)
 
+        keywords = self.get_keywords(results)
+        topics = self.get_topics(results)
+
         # render the results to the page!
-        self.render_html('pages/search_results.html', results=results)
+        self.render_html('pages/search_results.html',
+                keywords=keywords, topics=topics, results=results, term=value)

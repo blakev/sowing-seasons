@@ -15,6 +15,6 @@ if __name__ == '__main__':
     app, settings = make_app()
     app.listen(settings.port, settings.host)
 
-    print('Hosting on: %s:%s' % (settings.host, settings.port))
+    print('Hosting on: http://%s:%s' % (settings.host, settings.port))
 
     IOLoop.current().start()

@@ -1,9 +1,12 @@
 <div class="row">
 	<div class="col-xs-4">
-		<a href="/">SowingSeasons.com</a> - 2015-2016
+		<img src="/static/img/logo.png" alt="SowingSeasons Logo" class="footer-logo">
+		<a href="/">SowingSeasons.com</a>, 2015-2016
 		<br>
 		<adress>
 			<strong>Blake VandeMerwe</strong>
+			<br>
+			<a href="/login">Login</a>
 			<br>
 			<br>
 			<span class="text-muted">social</span>
@@ -25,26 +28,68 @@
 
 		<div class="row">
 			<div class="col-xs-6">
-				<span class="text-muted">powered by</span>
+				<span class="text-muted">secured & powered by</span>
+				<br><br>
+				<a href="{{ seo.referral.digital_ocean }}"><img class="logo-badge" src="/static/img/do_logo.png" alt="DigitalOcean"></a>
+				<a href="https://letsencrypt.org/"><img src="/static/img/le_logo.png" alt="Let's Encrypt" class="logo-badge"></a>
+				<a href="https://www.cloudflare.com/"><img src="/static/img/cf_logo.png" alt="CloudFlare" class="logo-badge-width"></a>
+				<br><br>
 				<ul class="list-unstyled">
-					<li>Python</li>
-					<li>Whoosh</li>
-					<li>Tornado</li>
+					<li><a href="https://python.org">Python</a></li>
+					<li><a href="https://bitbucket.org/mchaput/whoosh/wiki/Home">Whoosh</a></li>
+					<li><a href="http://www.tornadoweb.org/en/stable/">Tornado</a></li>
+					<li><a href="http://nginx.org/en/">nginx</a></li>
 				</ul>
 			</div>
 			<div class="col-xs-6">
 				<span class="text-muted">styled by</span>
 				<ul class="list-unstyled">
-					<li>Bootstrap</li>
-					<li>Bootswatch</li>
-					<li>SubtlePatterns</li>
+					<li><a href="http://getbootstrap.com/">Bootstrap</a></li>
+					<li><a href="https://bootswatch.com">Bootswatch</a>
+					(<a href="https://bootswatch.com/flatly/">theme</a>)</li>
+					<li><a href="http://subtlepatterns.com/">Subtle Patterns</a><br></li>
+					<li> - <a href="http://subtlepatterns.com/black-felt/"><em>Black Felt</em></a></li>
+					<li> - <a href="http://subtlepatterns.com/white-paperboard/"><em>White Paperboard</em></a></li>
 				</ul>
 			</div>
 		</div>
 	</div>
 	<div class="col-xs-4">
 		<strong>Meta</strong>
+
 		<br>
-		<a href="/login">Login</a>
+		<span class="text-muted">page data</span>
+		{% if results is defined and posts is not defined %}
+			{% set posts = results %}
+		{% endif %}
+		<ul class="list-unstyled meta-list">
+		{% if posts is defined %}
+			<li>Query, <em><strong>{{ posts.query }}</strong></em></li>
+			<li>Search time, <em><strong>{{ posts.search_time }}</strong></em></li>
+			<li>Results found, <em><strong>{{ posts.count }}</strong></em></li>
+		{% else %}
+			<li>irrelevant for current page</li>
+		{% endif %}
+		</ul>
+
+		{% set debug = 'text-danger' if settings.debug else 'text-success' %}
+
+		<span class="text-muted">server data</span>
+		<ul class="list-unstyled meta-list">
+			<li>Compress response? <em><strong>{{ settings.compress_response }}</strong></em></li>
+			<li>Debug mode? <em><strong class="{{ debug }}">{{ settings.debug }}</strong></em></li>
+			<li>Static Hashing? <em><strong>{{ settings.static_hash_cache }}</strong></em></li>
+			<li>XSRF cookies? <em><strong>{{ settings.xsrf_cookies }}</strong></em></li>
+		</ul>
+
+		<span class="text-muted">vm data</span>
+		<ul class="list-unstyled meta-list">
+			<li>System, <em><strong>{{ load.sys }}</strong></em></li>
+			<li>CPU load, <em><strong>{{ load.cpu }}%</strong></em></li>
+			<li>
+				Memory used, <em><strong>{{ load.memory.percent }}%</strong></em>
+				total, <em><strong>{{ load.memory.total|filesizeformat }}</strong></em>
+			</li>
+		</ul>
 	</div>
 </div>

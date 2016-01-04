@@ -1,5 +1,8 @@
 import os
+import sys
+from collections import Counter
 
+import psutil
 from jinja2 import Environment, FileSystemLoader, TemplateNotFound
 from markdown import markdown
 from markdown.extensions.fenced_code import FencedCodeExtension
@@ -17,6 +20,13 @@ fn_strip = lambda x: str(x).strip()
 
 def datetime_format(value, format='%m-%d-%Y'):
     return value.strftime(format)
+
+def get_system_load():
+    return {
+        'cpu': psutil.cpu_percent(interval=None),
+        'memory': psutil.virtual_memory(),
+        'sys': 'python ' + sys.version.split('(')[0] + sys.platform
+    }
 
 class TemplateRender(object):
     """ Class to hold HTML template rendering methods. """
@@ -46,13 +56,16 @@ class BaseHandler(web.RequestHandler, TemplateRender):
         super(BaseHandler, self).__init__(application, request, **kwargs)
         self._meta = None
 
+
     def get_current_user(self):
         return self.get_secure_cookie('user_id', None)
+
 
     def render_html(self, name, **kwargs):
         kwargs.update({
             'csrf': self.xsrf_form_html(),
             'current_user': self.get_current_user(),
+            'load': get_system_load(),
             'request': self.request,
             'seo': self.application.meta.seo,
             'settings': self.settings,
@@ -60,6 +73,19 @@ class BaseHandler(web.RequestHandler, TemplateRender):
             'xsrf_token': self.xsrf_token,
             'xsrf_form_html': self.xsrf_form_html })
         self.write(self.render_template(name, **kwargs))
+
+
+    def get_keywords(self, posts, most_common=20):
+        keywords = Counter()
+        # extract the most common keywords for the side bar
+        for post in posts.results:
+            keywords.update([x.strip() for x in post.get('keywords', '').split(',')])
+        return keywords.most_common(most_common)
+
+
+    def get_topics(self, posts):
+        return sorted(list(set(post.get('topic', None) for post in posts.results)))
+
 
     @property
     def meta(self):

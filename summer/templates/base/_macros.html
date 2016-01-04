@@ -5,7 +5,7 @@
 {%- endmacro %}
 
 {% macro post_link(post, bgclass) %}
-
+<div class="container-fluid {{ bgclass }}">
 	<div class="row">
 		<div class="col-xs-12">
 			<h2><i class="fa fa-file-text-o icon-left"></i>
@@ -14,7 +14,7 @@
 		</div>
 	</div>
 
-	<div class="row">
+	<div class="row post-link-header">
 		<div class="col-xs-8">
 			<ul class="list-unstyled">
 				<li>
@@ -27,21 +27,47 @@
 			{% endif %}
 			</ul>
 		</div>
-		<div class="col-xs-4">
-			<ul class="list-unstyled">
-				<li><i class="fa fa-bookmark-o icon-left"></i><a href="{{ post|slugify }}" class="btn btn-sm btn-link">Share</a></li>
-			</ul>
-		</div>
 	</div>
 
 	<div class="row">
 		<div class="col-xs-12">
-			<hr>
+			<small class="text-uppercase text-muted">summary</small>
 			<p>
-				{{ post.summary }}
+				<em class="quote">{{ post.summary }}</em>
 			</p>
 		</div>
 	</div>
 
+	<div class="row post-link-footer">
+		<div class="col-xs-12">
+			<p class="post-summary">
+				{{ post.content|truncate(300)}}
+			</p>
+		</div>
+	</div>
+</div>
+{% endmacro %}
+
+{% macro render_navigation(keywords, topics) %}
+    <h3>Topics</h3>
+    <ul class="list-unstyled">
+    {% for topic in topics %}
+        <li class="text-capitalize">
+            <a href="/search/topic/{{ topic }}">{{ topic }}</a>
+        </li>
+    {% endfor %}
+    </ul>
+    <h3>Keywords</h3>
+    <ul class="list-unstyled">
+    {% for kw, count in keywords %}
+        <li>
+            <span class="label label-default">{{ count }}</span>
+            <a href="/search/keywords/{{ kw }}" class="icon-right">
+                {{ kw }}
+            </a>
+
+        </li>
+    {% endfor %}
+    </ul>
 {% endmacro %}
 

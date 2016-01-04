@@ -84,7 +84,7 @@ def clean_results(idx, results, query=None):
 
 def get_default_schema(schema, uuid=None, modified_date=None):
     if uuid is None:
-        uuid = int(str(uuid4().int)[:5])
+        uuid = int(str(uuid4().int)[:8])
 
     if modified_date is None:
         modified = datetime.datetime.utcnow()

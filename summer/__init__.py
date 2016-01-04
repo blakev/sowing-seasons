@@ -25,15 +25,17 @@ def make_app(**settings):
 
     # set up our routing configuration
     app = Application([
-
-        url(r'/', IndexHandler),
+        # hard routes
+        url(r'/favicon.ico', StaticFileHandler, {'path': os.path.join(static_path, 'favicon.ico')}),
+        url(r'/robots.txt', StaticFileHandler, {'path': os.path.join(static_path, 'robots.txt')}),
+        # soft routes
         url(r'/login', LoginHandler),
         url(r'/admin/create', AdminCreateHandler),
         url(r'/search/([a-z]+)/(.*)', StaticSearchHandler),
         url(r'/blog/([a-z]+)/(\d+)/(\d+)/(.*)/(\d+)', BlogHandler),
-
-        url(r'/static/(.*)', StaticFileHandler, {'path': static_path})
-
+        # catch-all routes
+        url(r'/static/(.*)', StaticFileHandler, {'path': static_path}),
+        url(r'/', IndexHandler),
     ], **TORNADO_CONFIG)
 
     # storage location for singletons and factory methods
