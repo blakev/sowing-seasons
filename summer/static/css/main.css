@@ -24,6 +24,8 @@ div.post-content {
 }
 
 div.post-link-header {
+    padding-bottom: 0.5em;
+    margin-bottom: 0.25em;
     border-bottom: dashed 1px #a1a1a1;
 }
 
