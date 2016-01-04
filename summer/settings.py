@@ -1,7 +1,7 @@
 import uuid
 
 DEBUG = True
-CSRF_SECRET = 'woopsss' #uuid.uuid4().hex
+CSRF_SECRET = uuid.uuid4().hex
 
 APP_CONFIG = {
     'port': 8888
