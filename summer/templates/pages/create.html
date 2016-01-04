@@ -16,7 +16,7 @@
         <hr>
         <ul>
         {% if all_posts %}
-            {% for result in all_posts %}
+            {% for result in all_posts.results %}
                 {% set display = '[' ~ result.uuid ~ ']' if result.title is none else result.title %}
                 <li>
                     {{ result.modified.strftime('%m-%d, %Y') }}

@@ -10,6 +10,8 @@ from whoosh.fields import *
 from whoosh.index import create_in, exists_in, open_dir
 from whoosh.writing import IndexingError
 
+from summer.utils import DotDict
+
 logger = logging.getLogger(__name__)
 
 IGNORE_WORDS = []
@@ -58,9 +60,15 @@ def obtain_index(location, schema, index_name, force_new_index=False, read_only=
 
 # Helpers
 
-def clean_results(idx, results):
+def clean_results(idx, results, query=None):
     schema = idx.schema
     ret, default_document = list(), get_default_schema(schema)
+
+    metadata = DotDict()
+    metadata.search_time = round(results.runtime, 4)
+    metadata.count = len(results)
+    metadata.query = str(query)
+
     for doc in results:
         # create a copy of the default structure
         # then replace the fields that exist in our
@@ -69,7 +77,9 @@ def clean_results(idx, results):
         res = dict(default_document)
         res.update(doc.items())
         ret.append(res)
-    return ret
+
+    metadata.results = ret
+    return metadata
 
 
 def get_default_schema(schema, uuid=None, modified_date=None):
@@ -87,12 +97,21 @@ def get_default_schema(schema, uuid=None, modified_date=None):
     return ret_schema
 
 
-def slugify(title, some_date):
+def slugify(title):
     SLUG_REGEX = re.compile(r'[\w\d_]+')
     slug_title = '-'.join(map(lambda x: x.lower(), SLUG_REGEX.findall(title)))
-    slug_date = some_date.strftime('%h-%d-%Y').lower()
-    return slug_title, slug_date
+    return slug_title
 
+def document_slug(document):
+    # matches the BlogHandler pattern:
+    # .. /blog/([a-z]+)/(\d+)/(\d+)/(.*)/(\d+)/
+    # .. /blog/topic/year/month/_slug_/uuid/
+    doc = DotDict(document)
+    year = doc.modified.year
+    month = str(doc.modified.month).zfill(2)    # 0-pad the month
+
+    return r'/blog/{}/{}/{}/{}/{}'.format(
+        doc.topic, year, month, slugify(doc.title), doc.uuid)
 
 @gen.coroutine
 def write_index(idx, **fields):

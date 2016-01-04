@@ -1,0 +1,23 @@
+{% macro do_keywords(post) %}
+    {%- for k in post.keywords|split(',') %}
+        <a href="/search/keywords/{{ k|strip }}">{{ k }}</a>
+        {%- if not loop.last -%},
+        {%- endif %}
+    {%- endfor %}
+{% endmacro %}
+
+{% macro post_link(post) %}
+	<h3>
+		<a href="{{ post|slugify}}">{{ post.title }}</a>
+	<small>
+		<a href="/search/topic/{{ post.topic }}">{{ post.topic|upper }}</a>
+	</small>
+	</h3>
+	Keywords: {{ do_keywords(post) }}
+	<br>
+	Updated: {{ post.modified|datetime_format }}
+	<br>
+<br>
+	<p><em>{{ post.summary }}</em></p>
+{% endmacro %}
+

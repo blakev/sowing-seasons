@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="{{ seo.description }}">
-    <meta name="keywords" content="{{ seo.keywords }}">
+    <meta name="description" content="{% block seo_description %}{{ seo.description }}{% endblock %}">
+    <meta name="keywords" content="{% block seo_keywords %}{{ seo.keywords }}{% endblock %}">
     <meta name="author" content="{{ seo.author }}">
 
     <!-- google meta -->
@@ -17,12 +17,11 @@
     <!-- twitter meta -->
     <meta name=”twitter:card” content=”summary”>
     <meta name=”twitter:url” content=”{{ this_url }}”>
-    <meta name=”twitter:description” content=”{{ post.description if post is defined else seo.description }}”>
+    <meta name=”twitter:description” content=”{{ post.summary if post is defined else seo.description }}”>
 
-    {% if post is defined %}
-        <meta name="twitter:image" content="{{ post.img }}">
-        <meta property="og:image" content="{{ post.img }}">
-    {% endif %}
+    <!-- small icons -->
+    <meta name="twitter:image" content="{{ seo.img }}">
+    <meta property="og:image" content="{{ seo.img }}">
 
     <title>{% block title %}{% endblock %}</title>
 
@@ -33,12 +32,6 @@
 
     <nav class="navbar navbar-default">
         <div class="container-fluid">
-            <div class="navbar-header">
-                <a href="#" class="navbar-brand">
-                    <i class="fa fa-bolt"></i>
-                </a>
-            </div>
-
             <ul class="nav navbar-nav">
                 <li><a href="/">Blog</a></li>
                 <li><a href="#">Portfolio</a></li>
@@ -57,14 +50,18 @@
 
             <ul class="nav navbar-nav navbar-right">
                 <li>
+                    {% if current_user %}
                     <a href="/admin/create">
                         <i class="fa fa-plus"></i>
                     </a>
+                    {% endif %}
                 </li>
             </ul>
         </div>
     </nav>
 
+        <img src="/static/img/logo.png" alt="SowingSeasons">
+        
     {% if flash_msg is defined %}
         hi
     {% endif %}
@@ -84,12 +81,21 @@
         </div>
     </div>
 
+    <div class="page-spacer"></div>
+
     <footer class="footer">
         <div class="container">
-            <p class="text-muted">
-                Blake VandeMerwe
+            <p>
+                {% include "base/_footer.html" %}
             </p>
         </div>
     </footer>
+
+    <script>
+        hljs.configure({
+            tabReplace: '    '
+        });
+        hljs.initHighlightingOnLoad();
+    </script>
 </body>
 </html>

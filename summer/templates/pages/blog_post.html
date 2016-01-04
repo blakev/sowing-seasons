@@ -1,0 +1,43 @@
+{% extends "base/base.html" %}
+{% from "base/_macros.html" import do_keywords %}
+
+{% block title %}
+	{{ post.title }} - {{ post.topic }} : SowingSeasons
+{% endblock %}
+
+{% block content %}
+	<h2>{{ post.title }}</h2>
+
+	Given topic: <a href="/search/topic/{{ post.topic }}/">{{ post.topic }}</a>.
+	Keywords: {{ do_keywords(post) }}
+<br>
+	By: <a href="mailto: {{ seo.author_email }}">{{ seo.author_name }}</a>
+<br>
+	Updated: {{ post.modified|datetime_format }}
+
+	{% if current_user %}
+<br>
+<a href="/admin/create?post_id={{ post.uuid }}">Edit</a>
+	{% endif %}
+
+<hr>
+	{{ post.content|markdown }}
+
+	<div class="row">
+		<h3>Related</h3>
+		{% for rel in related.results %}
+			<div class="col-xs-4">
+				<h4>
+					<a href="{{ rel|slugify }}">{{ rel.title }}</a>
+					<small>
+						<a href="/search/topic/{{ rel.topic }}">{{ rel.topic|upper }}</a>
+					</small>
+				</h4>
+				<small>
+					{{ rel.summary }}
+				</small>
+			</div>
+
+		{% endfor %}
+	</div>
+{% endblock %}

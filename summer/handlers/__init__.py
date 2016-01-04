@@ -1,11 +1,22 @@
 import os
 
 from jinja2 import Environment, FileSystemLoader, TemplateNotFound
+from markdown import markdown
+from markdown.extensions.fenced_code import FencedCodeExtension
 from tornado import web
 
+from summer.ext.search import document_slug
 from summer.utils import DotDict
+from summer.utils.fn import code_highlighter
 
 DEFAULT_TEMPLATE_PATH = os.path.join(os.getcwd(), 'templates')
+
+fn_markdown = lambda x: markdown(x, extensions=[FencedCodeExtension()])
+fn_split = lambda x, y: str(x).split(y)
+fn_strip = lambda x: str(x).strip()
+
+def datetime_format(value, format='%m-%d-%Y'):
+    return value.strftime(format)
 
 class TemplateRender(object):
     """ Class to hold HTML template rendering methods. """
@@ -13,6 +24,15 @@ class TemplateRender(object):
     def render_template(self, name, **kwargs):
         template_path = self.settings.get('template_path', DEFAULT_TEMPLATE_PATH)
         env = Environment(loader=FileSystemLoader([template_path]))
+
+        # filters
+        env.filters['datetime_format'] = datetime_format
+        env.filters['highlight'] = code_highlighter
+        env.filters['markdown'] = fn_markdown
+        env.filters['slugify'] = document_slug
+        env.filters['split'] = fn_split
+        env.filters['strip'] = fn_strip
+
         try:
             template = env.get_template(name)
         except TemplateNotFound:

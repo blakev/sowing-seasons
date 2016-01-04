@@ -1,0 +1,24 @@
+{% extends "base/base.html" %}
+{% from "base/_macros.html" import post_link %}
+
+{% block title %}
+	 : SowingSeasons
+{% endblock %}
+
+{% block content %}
+<h2>Search Results</h2>
+
+<hr>
+<div class="text-right">
+	Took: {{ results.search_time }}s to find <strong>{{ results.count }}</strong> results.
+	<br>
+	Query: <i>{{ results.query }}</i>
+	<br>
+	<br>
+</div>
+
+{% for post in results.results %}
+	{{ post_link(post) }}
+{% endfor %}
+
+{% endblock %}

@@ -54,7 +54,8 @@ class AdminCreateHandler(BaseHandler):
         form = BlogPostForm()
 
         if by_id:
-            post = yield get_one_document(self.meta.search_index, by_id=by_id)
+            post, _ = yield get_one_document(self.meta.search_index, by_id=by_id)
+            post = post.results[0]
             if post:
                 form.title.data = post['title']
                 form.topic.data = post['topic']

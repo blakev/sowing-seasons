@@ -3,8 +3,10 @@ import os
 from tornado.web import Application, StaticFileHandler, url
 
 from summer.ext.search import SowingSchema, obtain_index, get_default_schema
+from summer.handlers.blog import BlogHandler
 from summer.handlers.core import IndexHandler, LoginHandler
 from summer.handlers.create import AdminCreateHandler
+from summer.handlers.search import StaticSearchHandler
 from summer.settings import TORNADO_CONFIG, WHOOSH, APP_CONFIG, SEO_VALUES
 from summer.utils import DotDict
 
@@ -24,9 +26,11 @@ def make_app(**settings):
     # set up our routing configuration
     app = Application([
 
-        (r'/', IndexHandler),
-        (r'/login', LoginHandler),
-        (r'/admin/create', AdminCreateHandler),
+        url(r'/', IndexHandler),
+        url(r'/login', LoginHandler),
+        url(r'/admin/create', AdminCreateHandler),
+        url(r'/search/([a-z]+)/(.*)', StaticSearchHandler),
+        url(r'/blog/([a-z]+)/(\d+)/(\d+)/(.*)/(\d+)', BlogHandler),
 
         url(r'/static/(.*)', StaticFileHandler, {'path': static_path})
 

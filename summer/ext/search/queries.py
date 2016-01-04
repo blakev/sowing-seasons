@@ -1,6 +1,9 @@
+from datetime import datetime, timedelta
+
 from tornado import gen
-from whoosh.query import Every
-from whoosh.qparser import MultifieldParser, OrGroup
+from whoosh.query import Every, DateRange
+from whoosh.qparser import MultifieldParser, OrGroup, QueryParser
+from whoosh.qparser.dateparse import DateParserPlugin
 from whoosh.sorting import MultiFacet
 
 from summer.ext.search import clean_results
@@ -12,14 +15,22 @@ def get_all_documents(idx, limit=None):
         results = search.search(Every(), limit=limit)
         return clean_results(idx, results)
 
-
 @gen.coroutine
 def get_one_document(idx, by_id=None):
     with idx.searcher() as search:
-        results = search.documents(uuid=by_id)
-        results = clean_results(idx, results)
-        return results[0] if results else None
+        q = QueryParser('uuid', idx.schema).parse(by_id)
+        results = search.search(q)
+        related = results[0].more_like_this('keywords', top=3, numterms=10)
+        return clean_results(idx, results), clean_results(idx, related)
 
+@gen.coroutine
+def documents_last_year(idx):
+    pass
+
+@gen.coroutine
+def documents_last_month(idx):
+    posts = yield generic(idx, qs="modified:-30 days to now")
+    return posts
 
 @gen.coroutine
 def get_related(idx, by_id=None):
@@ -27,14 +38,16 @@ def get_related(idx, by_id=None):
 
 
 @gen.coroutine
-def generic(idx, qs=None, q=None, limit=10):
+def generic(idx, qs=None, q=None, limit=10, parser=None):
     if qs is q is None:
         raise ValueError('cannot have a null querystring and query')
 
-    parser = MultifieldParser(
-            ['title', 'keywords', 'summary', 'content'], idx.schema, group=OrGroup)
+    if parser is None:
+        parser = MultifieldParser(
+                ['title', 'keywords', 'summary', 'content'], idx.schema, group=OrGroup)
 
-    metadata = DotDict()
+    # add better date parsing support
+    parser.add_plugin(DateParserPlugin())
 
     with idx.searcher() as search:
         # generate the Query object
@@ -44,16 +57,11 @@ def generic(idx, qs=None, q=None, limit=10):
             query = q
 
         facet = MultiFacet()
-        facet.add_field('modified', reverse=True)
         facet.add_score()
+        facet.add_field('modified', reverse=True)
         facet.add_field('title')
 
         results = search.search(query, sortedby=facet, limit=limit)
+        res = clean_results(idx, results, query)
 
-        metadata.search_time = results.runtime
-        metadata.qs = qs
-        metadata.query = str(query)
-        metadata.count = len(results)
-        metadata.results = clean_results(idx, results)
-
-    return metadata
+    return res

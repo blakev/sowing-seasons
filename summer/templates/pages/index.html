@@ -1,18 +1,35 @@
 {% extends "base/base.html" %}
+{% from "base/_macros.html" import post_link %}
 
 {% block title %}
 SowingSeasons
 {% endblock %}
 
 {% block navigation %}
-    <h3>Newest Posts</h3>
-    <ul>
-    {% for post in posts.results %}
-        <li>{{ post.title }}</li>
+    <h3>Topics</h3>
+    <ul class="list-unstyled">
+    {% for topic in topics %}
+        <li class="text-capitalize">
+            <a href="/search/topic/{{ topic }}">{{ topic }}</a>
+        </li>
+    {% endfor %}
+    </ul>
+    <h3>Keywords</h3>
+    <ul class="list-unstyled">
+    {% for kw, count in keywords %}
+        <li>
+            <a href="/search/keywords/{{ kw }}">{{ kw }}</a>
+            ( <em>{{ count }}</em> )
+        </li>
     {% endfor %}
     </ul>
 {% endblock %}
 
 {% block content %}
-    {{ posts }}
+    <h3>Newest Posts</h3>
+    <ul>
+    {% for post in posts.results %}
+        {{ post_link(post) }}
+    {% endfor %}
+    </ul>
 {% endblock %}
