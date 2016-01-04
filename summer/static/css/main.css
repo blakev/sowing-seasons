@@ -50,3 +50,11 @@ i.icon-right {
 .page-spacer {
     height: 6em;
 }
+
+.odd-result {
+    background-color: #f2f2f2;
+}
+
+.even-result {
+    background-color: #cacaca;
+}

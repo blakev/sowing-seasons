@@ -1,23 +1,47 @@
-{% macro do_keywords(post) %}
-    {%- for k in post.keywords|split(',') %}
-        <a href="/search/keywords/{{ k|strip }}">{{ k }}</a>
-        {%- if not loop.last -%},
-        {%- endif %}
-    {%- endfor %}
-{% endmacro %}
+{% macro do_keywords(post) -%}
+{%- for k in post.keywords|split(',') %}
+    <a class="btn btn-xs btn-link" href="/search/keywords/{{ k|strip }}">{{ k }}</a>
+{%- endfor %}
+{%- endmacro %}
 
-{% macro post_link(post) %}
-	<h3>
-		<a href="{{ post|slugify}}">{{ post.title }}</a>
-	<small>
-		<a href="/search/topic/{{ post.topic }}">{{ post.topic|upper }}</a>
-	</small>
-	</h3>
-	Keywords: {{ do_keywords(post) }}
-	<br>
-	Updated: {{ post.modified|datetime_format }}
-	<br>
-<br>
-	<p><em>{{ post.summary }}</em></p>
+{% macro post_link(post, bgclass) %}
+
+	<div class="row">
+		<div class="col-xs-12">
+			<h2><i class="fa fa-file-text-o icon-left"></i>
+				<a href="{{ post|slugify }}">{{ post.title }}</a>
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-xs-8">
+			<ul class="list-unstyled">
+				<li>
+					<i class="fa fa-code icon-left"></i><a class="btn btn-xs btn-link" href="/search/topic/{{ post.topic }}/">{{ post.topic }}</a>
+					<i class="fa fa-hashtag icon-right icon-left"></i>{{- do_keywords(post) }}
+				</li>
+				<li><i class="fa fa-calendar-o icon-left"></i>{{ post.modified|datetime_format }}</li>
+			{% if current_user %}
+				<li><a href="/admin/create?post_id={{ post.uuid }}">Edit</a></li>
+			{% endif %}
+			</ul>
+		</div>
+		<div class="col-xs-4">
+			<ul class="list-unstyled">
+				<li><i class="fa fa-bookmark-o icon-left"></i><a href="{{ post|slugify }}" class="btn btn-sm btn-link">Share</a></li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-xs-12">
+			<hr>
+			<p>
+				{{ post.summary }}
+			</p>
+		</div>
+	</div>
+
 {% endmacro %}
 

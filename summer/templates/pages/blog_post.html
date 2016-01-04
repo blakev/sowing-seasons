@@ -6,38 +6,78 @@
 {% endblock %}
 
 {% block content %}
-	<h2>{{ post.title }}</h2>
-
-	Given topic: <a href="/search/topic/{{ post.topic }}/">{{ post.topic }}</a>.
-	Keywords: {{ do_keywords(post) }}
-<br>
-	By: <a href="mailto: {{ seo.author_email }}">{{ seo.author_name }}</a>
-<br>
-	Updated: {{ post.modified|datetime_format }}
-
-	{% if current_user %}
-<br>
-<a href="/admin/create?post_id={{ post.uuid }}">Edit</a>
-	{% endif %}
-
-<hr>
-	{{ post.content|markdown }}
+	<a href="javascript: window.history.back();"><i class="fa fa-arrow-left icon-left"></i> Back</a>
 
 	<div class="row">
-		<h3>Related</h3>
+		<div class="col-xs-12">
+			<h2><i class="fa fa-file-text-o icon-left"></i>{{ post.title }}</h2>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-xs-8">
+			<ul class="list-unstyled">
+				<li>
+					<i class="fa fa-code icon-left"></i><a class="btn btn-xs btn-link" href="/search/topic/{{ post.topic }}/">{{ post.topic }}</a>
+					<i class="fa fa-hashtag icon-right icon-left"></i>{{- do_keywords(post) }}
+				</li>
+				<li><i class="fa fa-at icon-left"></i><a href="mailto: {{ seo.author_email }}">{{ seo.author_name }}</a></li>
+				<li><i class="fa fa-calendar-o icon-left"></i>{{ post.modified|datetime_format }}</li>
+			{% if current_user %}
+				<li><a href="/admin/create?post_id={{ post.uuid }}">Edit</a></li>
+			{% endif %}
+			</ul>
+		</div>
+		<div class="col-xs-4">
+			<ul class="list-unstyled">
+				<li><i class="fa fa-bookmark-o icon-left"></i><a href="{{ post|slugify }}" class="btn btn-sm btn-link">Share</a></li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-xs-12">
+			<hr>
+				{{ post.content|markdown }}
+			<hr>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-xs-12">
+			<h3><i class="fa fa-asterisk icon-left"></i>Related</h3>
+		</div>
+	</div>
+
+	<div class="row">
 		{% for rel in related.results %}
 			<div class="col-xs-4">
-				<h4>
-					<a href="{{ rel|slugify }}">{{ rel.title }}</a>
+				<div class="well">
+					<h4>
+						<a href="{{ rel|slugify }}">{{ rel.title }}</a>
+					</h4>
+					<a class="btn btn-sm btn-default" href="/search/topic/{{ rel.topic }}">{{ rel.topic|upper }}</a>
+					<br>
+					<br>
 					<small>
-						<a href="/search/topic/{{ rel.topic }}">{{ rel.topic|upper }}</a>
+						<p>{{ rel.summary }}</p>
 					</small>
-				</h4>
-				<small>
-					{{ rel.summary }}
-				</small>
+				</div>
 			</div>
-
 		{% endfor %}
+	</div>
+
+	<div class="row">
+		<div class="col-xs-12">
+			<h3><i class="fa fa-comments-o icon-left"></i>Comments</h3>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="well">
+				PLACEHOLDER
+			</div>
+		</div>
 	</div>
 {% endblock %}

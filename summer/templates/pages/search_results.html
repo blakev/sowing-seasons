@@ -18,7 +18,8 @@
 </div>
 
 {% for post in results.results %}
-	{{ post_link(post) }}
+	{% set bgclass = loop.cycle('odd-result', 'even-result') %}
+	{{ post_link(post, bgclass) }}
 {% endfor %}
 
 {% endblock %}
