@@ -10,6 +10,8 @@ if __name__ == '__main__':
     path, file = os.path.split(__file__)
     os.chdir(path)
 
+    print(path)
+
     app, settings = make_app()
     app.listen(settings.port, settings.host)
 
