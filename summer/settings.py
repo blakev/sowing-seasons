@@ -4,7 +4,8 @@ DEBUG = True
 CSRF_SECRET = uuid.uuid4().hex
 
 APP_CONFIG = {
-    'port': 8888
+    'port': 8888,
+    'host': '127.0.0.1'
 }
 
 SEO_VALUES = {
