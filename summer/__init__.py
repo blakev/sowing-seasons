@@ -4,10 +4,10 @@ import json
 from tornado.web import Application, StaticFileHandler, url
 
 from summer.ext.search import SowingSchema, obtain_index, get_default_schema
-from summer.handlers.blog import BlogHandler
+from summer.handlers.blog import BlogHandler, OldBlogHandler
 from summer.handlers.core import IndexHandler, LoginHandler
 from summer.handlers.create import AdminCreateHandler
-from summer.handlers.search import StaticSearchHandler
+from summer.handlers.search import StaticSearchHandler, DynamicSearchHandler
 from summer.settings import TORNADO_CONFIG, WHOOSH, APP_CONFIG, SEO_VALUES
 from summer.utils import DotDict
 
@@ -32,7 +32,9 @@ def make_app(**settings):
         # soft routes
         url(r'/login', LoginHandler),
         url(r'/admin/create', AdminCreateHandler),
+        url(r'/search', DynamicSearchHandler),
         url(r'/search/([a-z]+)/(.*)', StaticSearchHandler),
+        url(r'/blog/([a-zA-Z0-9\-_]+)\.html', OldBlogHandler),
         url(r'/blog/([a-z]+)/(\d+)/(\d+)/(.*)/(\d+)', BlogHandler),
         # catch-all routes
         url(r'/static/(.*)', StaticFileHandler, {'path': static_path}),
@@ -48,7 +50,7 @@ def make_app(**settings):
         WHOOSH.get('location'), SowingSchema, WHOOSH.get('index_name'))
 
     # ~~ private settings
-    private_settings = json.load(open('private_settings.json', 'r'))
+    private_settings = json.load(open('PRIVATE_SETTINGS.json', 'r'))
     # bootstrap the private settings into the meta-object accessible
     # in the BaseHandler webRequest class
     app.meta.private = private_settings
@@ -61,7 +63,7 @@ def make_app(**settings):
     app.meta.username_combo = (username, password,)
 
     # callback settings for launching the server
-    app_settings = DotDict()
-    app_settings.update(APP_CONFIG)
+    app_settings = DotDict(APP_CONFIG)
+    app.meta.settings = app_settings
 
     return app, app_settings

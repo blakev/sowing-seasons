@@ -66,11 +66,11 @@ class BaseHandler(web.RequestHandler, TemplateRender):
             'csrf': self.xsrf_form_html(),
             'current_user': self.get_current_user(),
             'load': get_system_load(),
-            'private': self.application.meta.private,
+            'private': self.meta.private,
             'request': self.request,
-            'seo': self.application.meta.seo,
+            'seo': self.meta.seo,
             'settings': self.settings,
-            'this_url': '%s://%s%s' % (self.request.protocol, self.request.host, self.request.uri),
+            'this_url': '%s://%s%s' % (self.meta.settings.protocol, self.meta.settings.domain, self.request.uri),
             'xsrf_token': self.xsrf_token,
             'xsrf_form_html': self.xsrf_form_html })
         self.write(self.render_template(name, **kwargs))
