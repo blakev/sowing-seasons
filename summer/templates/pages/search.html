@@ -1,10 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8">
-		<title>Search</title>
-	</head>
-	<body>
-		<h1>Search</h1>
-	</body>
-</html>
+{% extends "base/base.html" %}
+
+{% block title %}
+	Search : SowingSeasons
+{% endblock %}
+
+{% block content %}
+	<ol class="breadcrumb">
+		<li><a href="/">Home</a></li>
+		<li><a href="/search">Search</a></li>
+	</ol>
+
+	<h2><i class="fa fa-search icon-left"></i>Search</h2>
+
+{% endblock %}

@@ -7,7 +7,9 @@
     <meta name="keywords" content="{% block seo_keywords %}{{ seo.keywords }}{% endblock %}">
     <meta name="author" content="{{ seo.author }}">
 
+    <!-- meta links -->
     <link rel="icon" type="image/ico" href="/favicon.ico">
+    <link rel="feed" type="application/atom+xml" href="/feed.atom" title="All Articles">
 
     <!-- google meta -->
     <link rel="author" href="https://plus.google.com/{{ seo.google.author_id }}">
@@ -74,7 +76,7 @@
         <a href="/"><img src="/static/img/logo.png" alt="SowingSeasons"></a>
     </div>
 
-    <div class="container-fluid">
+    <div class="container-fluid main-area">
         <div class="row">
             <div class="col-sm-6 col-sm-offset-1 main-content">
                 {% block content %}
@@ -89,13 +91,13 @@
 
     <div class="page-spacer"></div>
 
-    <footer class="footer">
+    <div class="footer">
         <div class="container">
             <p>
                 {% include "base/_footer.html" %}
             </p>
         </div>
-    </footer>
+    </div>
 
     <script>
         hljs.configure({

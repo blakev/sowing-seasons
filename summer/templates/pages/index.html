@@ -10,7 +10,15 @@
         <li><a href="/">Home</a></li>
     </ol>
 
-    <h2>Newest Posts</h2>
+    <h2>
+        <i class="fa fa-newspaper-o icon-left"></i>
+        Newest Posts
+    </h2>
+
+    <div class="text-right">
+        Newest posts <a href="/feed.atom"><i class="fa fa-rss"></i></a>
+    </div>
+
     <ul>
     {% for post in posts.results %}
         {% set bgclass = loop.cycle('odd-result', 'even-result') %}

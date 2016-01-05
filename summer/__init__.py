@@ -5,9 +5,9 @@ from tornado.web import Application, StaticFileHandler, url
 
 from summer.ext.search import SowingSchema, obtain_index, get_default_schema
 from summer.handlers.blog import BlogHandler, OldBlogHandler
-from summer.handlers.core import IndexHandler, LoginHandler
+from summer.handlers.core import AtomFeedHandler, IndexHandler, LoginHandler
 from summer.handlers.create import AdminCreateHandler
-from summer.handlers.search import StaticSearchHandler, DynamicSearchHandler
+from summer.handlers.search import DynamicSearchHandler, StaticSearchHandler
 from summer.settings import TORNADO_CONFIG, WHOOSH, APP_CONFIG, SEO_VALUES
 from summer.utils import DotDict
 
@@ -29,6 +29,7 @@ def make_app(**settings):
         # hard routes
         url(r'/favicon.ico', StaticFileHandler, {'path': os.path.join(static_path, 'favicon.ico')}),
         url(r'/robots.txt', StaticFileHandler, {'path': os.path.join(static_path, 'robots.txt')}),
+        url(r'/feed.atom', AtomFeedHandler),
         # soft routes
         url(r'/login', LoginHandler),
         url(r'/admin/create', AdminCreateHandler),

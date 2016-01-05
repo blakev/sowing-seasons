@@ -4,8 +4,12 @@ html {
 }
 body {
     font-size: 1.6em;
-  /* Margin bottom by footer height */
-  margin-bottom: 350px;
+    background: #131313 url('/static/img/zwartevilt.png');
+}
+
+div.main-area {
+    background-color: white;
+    padding-bottom: 6.5em;
 }
 
 div.main-content {
@@ -57,17 +61,15 @@ p.post-summary {
 
 .footer {
     padding-top: 1em;
-    position: absolute;
     bottom: 0;
     width: 100%;
-    /* Set the fixed height of the footer here */
-    min-height: 350px;
     color: #dddddd;
     background: #131313 url('/static/img/zwartevilt.png');
 }
 
 .footer-logo {
     margin-bottom: -14px;
+    z-index: 50;
 }
 
 .logo-badge {
@@ -106,7 +108,8 @@ p.post-summary {
 }
 
 .page-spacer {
-    height: 6.5em;
+    height: 1em;
+    background: #676863;
 }
 
 .odd-result {

@@ -70,7 +70,7 @@ class BaseHandler(web.RequestHandler, TemplateRender):
             'request': self.request,
             'seo': self.meta.seo,
             'settings': self.settings,
-            'this_url': '%s://%s%s' % (self.meta.settings.protocol, self.meta.settings.domain, self.request.uri),
+            'this_url': self.this_url,
             'xsrf_token': self.xsrf_token,
             'xsrf_form_html': self.xsrf_form_html })
         self.write(self.render_template(name, **kwargs))
@@ -94,3 +94,7 @@ class BaseHandler(web.RequestHandler, TemplateRender):
             self._meta = DotDict(self.application.meta)
         return self._meta
 
+    @property
+    def this_url(self):
+        return '{}://{}{}'.format(
+            self.meta.settings.protocol, self.meta.settings.domain, self.request.uri)
