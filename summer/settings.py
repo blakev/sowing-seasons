@@ -1,17 +1,24 @@
 import uuid
 
+def contents_of(f):
+    with open(f, 'r') as ins_file:
+        contents = ' '.join(ins_file.readlines())
+    return contents
+
 DEBUG = True
 CSRF_SECRET = uuid.uuid4().hex
 
 APP_CONFIG = {
     'port': 8888,
-    'host': '127.0.0.1'
+    'host': '127.0.0.1',
+    'domain': 'sowingseasons.com',
+    'protocol': 'https' # we don't support HTTP on the WildWildWeb
 }
 
 SEO_VALUES = {
     'title': 'SowingSeasons - takes awhile to grow anything.',
     'keywords': 'technology,programming,python',
-    'description': '',
+    'description': contents_of(r'DESCRIPTION'),
     'author': 'Blake VandeMerwe <blakev@null.net>',
     'author_name': 'Blake VandeMerwe',
     'author_email': 'blakev@null.net',

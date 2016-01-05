@@ -30,3 +30,9 @@ class StaticSearchHandler(BaseHandler):
         # render the results to the page!
         self.render_html('pages/search_results.html',
                 keywords=keywords, topics=topics, results=results, term=value)
+
+
+class DynamicSearchHandler(BaseHandler):
+    @gen.coroutine
+    def get(self):
+        self.render_html('pages/search.html')
