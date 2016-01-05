@@ -123,3 +123,14 @@ p.post-summary {
 .meta-list {
     color: #3B403B;
 }
+
+.icon-column {
+    display: inline-block;
+    width: 24px;
+}
+
+.value-column {
+    text-align: left;
+    display: inline-block;
+    width: 160px;
+}
