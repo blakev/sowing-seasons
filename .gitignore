@@ -1,3 +1,5 @@
+private_*
+
 *.idea
 .idea/
 .idea/*

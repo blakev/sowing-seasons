@@ -66,6 +66,7 @@ class BaseHandler(web.RequestHandler, TemplateRender):
             'csrf': self.xsrf_form_html(),
             'current_user': self.get_current_user(),
             'load': get_system_load(),
+            'private': self.application.meta.private,
             'request': self.request,
             'seo': self.application.meta.seo,
             'settings': self.settings,

@@ -1,4 +1,5 @@
 import os
+import json
 
 from tornado.web import Application, StaticFileHandler, url
 
@@ -46,10 +47,18 @@ def make_app(**settings):
     app.meta.search_index = obtain_index(
         WHOOSH.get('location'), SowingSchema, WHOOSH.get('index_name'))
 
+    # ~~ private settings
+    private_settings = json.load(open('private_settings.json', 'r'))
+    # bootstrap the private settings into the meta-object accessible
+    # in the BaseHandler webRequest class
+    app.meta.private = private_settings
+
     # ~~ authentication
-    with open('auth_credentials', 'r') as auth_file:
-        app.meta.auth_token = auth_file.readline().strip()
-        app.meta.username_combo = auth_file.readline().strip().split(',')
+    auth = private_settings.get('auth', {})
+    username, password = auth.get('username', None), auth.get('password', None)
+
+    app.meta.auth_token = auth.get('token', None)
+    app.meta.username_combo = (username, password,)
 
     # callback settings for launching the server
     app_settings = DotDict()
