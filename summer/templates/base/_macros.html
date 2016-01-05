@@ -7,27 +7,31 @@
 {% macro post_link(post, bgclass) %}
 <div class="container-fluid {{ bgclass }}">
 	<div class="row">
-		<div class="col-xs-12">
-			<h2><i class="fa fa-file-text-o icon-left"></i>
+		<div class="col-xs-1">
+			<h2><i class="fa fa-file-text-o icon-left"></i></h2>
+		</div>
+		<div class="col-xs-10">
+			<h2>
 				<a href="{{ post|slugify }}">{{ post.title }}</a>
 			</h2>
 		</div>
 	</div>
 
 	<div class="row post-link-header">
-		<div class="col-xs-8">
-			<ul class="list-unstyled">
-				<li>
-					<i class="fa fa-code icon-left"></i><a class="btn btn-xs btn-link" href="/search/topic/{{ post.topic }}/">{{ post.topic }}</a>
-					<i class="fa fa-hashtag icon-right icon-left"></i>{{- do_keywords(post) }}
-				</li>
-				<li><i class="fa fa-calendar-o icon-left"></i>{{ post.modified|datetime_format }}</li>
-			{% if current_user %}
-				<li><a href="/admin/create?post_id={{ post.uuid }}">Edit</a></li>
-			{% endif %}
-			</ul>
+		<div class="col-xs-3">
+			<i class="fa fa-code icon-left"></i><a class="btn btn-xs btn-link" href="/search/topic/{{ post.topic }}/">{{ post.topic }}</a>
+		</div>
+		<div class="col-xs-6">
+			<i class="fa fa-hashtag icon-right icon-left"></i>{{- do_keywords(post) }}
+		</div>
+		<div class="col-xs-3 text-right">
+			<i class="fa fa-calendar-o icon-right icon-left"></i>{{ post.modified|datetime_format }}
 		</div>
 	</div>
+
+	{% if current_user %}
+		<a href="/admin/create?post_id={{ post.uuid }}">Edit</a>
+	{% endif %}
 
 	<div class="row">
 		<div class="col-xs-12">
