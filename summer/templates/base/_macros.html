@@ -1,5 +1,5 @@
 {% macro do_keywords(post) -%}
-{%- for k in post.keywords|split(',') %}
+{%- for k in post.keywords|split(',')|sort %}
     <a class="btn btn-xs btn-link" href="/search/keywords/{{ k|strip }}">{{ k }}</a>
 {%- endfor %}
 {%- endmacro %}
@@ -51,7 +51,7 @@
 {% macro render_navigation(keywords, topics) %}
     <h3>Topics</h3>
     <ul class="list-unstyled">
-    {% for topic in topics %}
+    {% for topic in topics|sort %}
         <li class="text-capitalize">
             <a href="/search/topic/{{ topic }}">{{ topic }}</a>
         </li>
@@ -59,13 +59,12 @@
     </ul>
     <h3>Keywords</h3>
     <ul class="list-unstyled">
-    {% for kw, count in keywords %}
+    {% for kw, count in keywords|sort %}
         <li>
             <span class="label label-default">{{ count }}</span>
             <a href="/search/keywords/{{ kw }}" class="icon-right">
                 {{ kw }}
             </a>
-
         </li>
     {% endfor %}
     </ul>
