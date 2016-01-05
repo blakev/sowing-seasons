@@ -116,15 +116,24 @@ p.post-summary {
     padding: 0.5em 1em;
     background-color: transparent;
     border-right: 3px solid #373737;
+    border-radius: 5px;
 }
 
 .even-result {
     padding: 0.5em 1em;
-    background-color: #f8f8f8;
+    background-color: #f8f5f0;
+    border-left: 3px solid #c6c3be;
+    border-radius: 5px;
 }
 
 .meta-list {
     color: #3B403B;
+}
+
+.icon-column-search {
+    text-align: right;
+    width: 48px;
+    padding-right: 16px;
 }
 
 .icon-column {
