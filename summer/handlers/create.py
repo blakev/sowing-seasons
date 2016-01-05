@@ -17,10 +17,10 @@ class AdminCreateHandler(BaseHandler):
         fields = get_default_schema(idx.schema)
         fields.update({
             'title': self.get_argument('title'),
-            'keywords': self.get_argument('keywords'),
+            'keywords': self.get_argument('keywords').lower(),
             'summary': self.get_argument('summary'),
             'content': self.get_argument('content'),
-            'topic': self.get_argument('topic')
+            'topic': self.get_argument('topic').lower()
         })
 
         redirect_url = '/admin/create'
