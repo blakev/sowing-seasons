@@ -8,7 +8,13 @@ from summer.handlers import BaseHandler
 
 class StaticSearchHandler(BaseHandler):
     @gen.coroutine
-    def get(self, subject, value):
+    def get(self, subject, value, is_atom=None):
+        # pagination results
+        try:
+            page_number = int(self.get_argument('page', 1))
+        except ValueError:
+            page_number = 1
+
         # get the index from the application meta data
         idx = self.meta.search_index
 
@@ -22,14 +28,19 @@ class StaticSearchHandler(BaseHandler):
         parser = QueryParser(subject, schema=idx.schema)
 
         # get our results, in a clean format for display
-        results = yield generic(idx, qs=q, parser=parser)
+        results = yield generic(idx, qs=q, parser=parser, page=page_number)
 
         keywords = self.get_keywords(results)
         topics = self.get_topics(results)
 
-        # render the results to the page!
-        self.render_html('pages/search_results.html',
-                keywords=keywords, topics=topics, results=results, term=value)
+        if is_atom:
+            # render the results as an atom feed
+            self.write(self.generate_feed(results, subtitle=q, url=self.this_url))
+
+        else:
+            # render the results to the page!
+            self.render_html('pages/search_results.html',
+                    keywords=keywords, topics=topics, results=results, term=value)
 
 
 class DynamicSearchHandler(BaseHandler):
