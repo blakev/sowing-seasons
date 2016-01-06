@@ -1,6 +1,44 @@
 {% extends "base/base.html" %}
 {% from "base/_macros.html" import post_link, render_navigation %}
 
+{% macro this_page_uri(page_number=1) -%}
+	{{ request.uri|split('?')|first }}{% if page_number %}?page={{ page_number }}{% endif %}
+{%- endmacro %}
+
+{% macro do_pagination(klass='') %}
+	<div class="row">
+		<div class="col-xs-12">
+			<nav>
+				<ul class="pagination {{ klass }}">
+					{% if results.page_number > 1 %}
+					<li>
+						<a href="{{ this_page_uri(results.page_number - 1) }}">
+							<i class="fa fa-chevron-left"></i>
+						</a>
+					</li>
+					{% endif %}
+					{% for p in results|calculate_pagination %}
+						{% if loop.index == results.page_number %}
+					<li class="active">
+						{% else %}
+					<li>
+						{% endif %}
+						<a href="{{ this_page_uri(loop.index) }}">{{ loop.index }}</a>
+					</li>
+					{% endfor %}
+					{% if results.page_number < results.page_total %}
+					<li>
+						<a href="{{ this_page_uri(results.page_number + 1) }}">
+							<i class="fa fa-chevron-right"></i>
+						</a>
+					</li>
+					{% endif %}
+				</ul>
+			</nav>
+		</div>
+	</div>
+{% endmacro %}
+
 {% block title %}
 	 {{ term }} - Search : SowingSeasons
 {% endblock %}
@@ -19,10 +57,21 @@
             <i class="fa fa-terminal icon-column-search"></i>Query: <i>{{ results.query }}</i>
             <br>
             <small>
-	            <i class="fa fa-clock-o icon-column-search"></i>Took: {{ results.search_time }}s to find <strong>{{ results.count }}</strong> results.
+	            <i class="fa fa-clock-o icon-column-search"></i>Took: {{ results.search_time }} secs.
             </small>
         </small>
 	</h2>
+
+	<div class="row">
+		<div class="col-xs-6 text-left">
+			Page {{ results.page_number }} of
+			<a href="{{ this_page_uri(results.page_total) }}">{{ results.page_total }}</a>
+		</div>
+		<div class="col-xs-6 text-right">
+			Showing {{ results.offset + 1 }}-{{ results.offset + results.pagelen }} of {{ results.count }}
+			<a href="{{ this_page_uri(None) }}.atom"><i class="fa fa-rss"></i></a>
+		</div>
+	</div>
 
 	<ul>
 	{% for post in results.results %}
@@ -30,6 +79,10 @@
 		{{ post_link(post, bgclass) }}
 	{% endfor %}
 	</ul>
+
+	{% if results.page_total > 1 %}
+		{{ do_pagination() }}
+	{% endif %}
 {% endblock %}
 
 {% block navigation %}

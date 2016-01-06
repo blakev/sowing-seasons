@@ -1,3 +1,4 @@
+from collections import Counter
 from datetime import datetime, timedelta
 
 from tornado import gen
@@ -8,6 +9,20 @@ from whoosh.sorting import MultiFacet
 
 from summer.ext.search import clean_results
 from summer.utils import DotDict
+
+@gen.coroutine
+def get_all_topics_and_kw(idx):
+    with idx.searcher() as search:
+        # collections to return as the result
+        keywords = Counter()
+        topics = set()
+        # search through every document
+        results = search.search(Every(), limit=None)
+        for document in results:
+            # and extract the Topic and Keywords, how we want them
+            topics.add(document['topic'])
+            keywords.update([x.strip() for x in document.get('keywords', '').split(',')])
+    return {'keywords': keywords.most_common(None), 'topics': topics}
 
 @gen.coroutine
 def get_all_documents(idx, limit=None):
@@ -33,12 +48,7 @@ def documents_last_month(idx):
     return posts
 
 @gen.coroutine
-def get_related(idx, by_id=None):
-    pass
-
-
-@gen.coroutine
-def generic(idx, qs=None, q=None, limit=10, parser=None):
+def generic(idx, qs=None, q=None, limit=10, parser=None, page=1):
     if qs is q is None:
         raise ValueError('cannot have a null querystring and query')
 
@@ -61,7 +71,13 @@ def generic(idx, qs=None, q=None, limit=10, parser=None):
         facet.add_field('modified', reverse=True)
         facet.add_field('title')
 
-        results = search.search(query, sortedby=facet, limit=limit)
+        results = search.search_page(query, pagenum=page, sortedby=facet, pagelen=limit)
         res = clean_results(idx, results, query)
+
+        # pagination attributes on `search_page` method
+        res.page_number = results.pagenum   # current page number
+        res.page_total = results.pagecount  # total pages in results
+        res.offset = results.offset         # first result of current page
+        res.pagelen = results.pagelen       # the number of max results per page
 
     return res

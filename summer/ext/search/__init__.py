@@ -58,14 +58,30 @@ def obtain_index(location, schema, index_name, force_new_index=False, read_only=
     return index
 
 
-# Helpers
-
 def clean_results(idx, results, query=None):
     schema = idx.schema
     ret, default_document = list(), get_default_schema(schema)
 
     metadata = DotDict()
-    metadata.search_time = round(results.runtime, 4)
+
+    if hasattr(results, 'runtime'):
+        # regular search.search(..) method call
+        runtime = results.runtime
+    else:
+        if hasattr(results, 'results'):
+            # search.search_page(..) hides the underlying
+            # `results` object as a new attribute in a `ResultsPage`
+            # wrapper.
+            runtime = results.results.runtime
+        else:
+            # if we can't get the runtime, suggest a negative
+            # number...hopefully this doesn't happen and might
+            # be considered a bug if the runtime returns as -1
+            runtime = -1
+
+    # round the runtime to the nearest 4th decimal place
+    metadata.search_time = round(runtime, 4)
+
     metadata.count = len(results)
     metadata.query = str(query)
 
@@ -79,6 +95,7 @@ def clean_results(idx, results, query=None):
         ret.append(res)
 
     metadata.results = ret
+
     return metadata
 
 
@@ -102,6 +119,7 @@ def slugify(title):
     slug_title = '-'.join(map(lambda x: x.lower(), SLUG_REGEX.findall(title)))
     return slug_title
 
+
 def document_slug(document):
     # matches the BlogHandler pattern:
     # .. /blog/([a-z]+)/(\d+)/(\d+)/(.*)/(\d+)/
@@ -112,6 +130,7 @@ def document_slug(document):
 
     return r'/blog/{}/{}/{}/{}/{}'.format(
         doc.topic, year, month, slugify(doc.title), doc.uuid)
+
 
 @gen.coroutine
 def write_index(idx, **fields):

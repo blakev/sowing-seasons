@@ -53,6 +53,7 @@
 {% endmacro %}
 
 {% macro render_navigation(keywords, topics) %}
+
     <h3>Topics</h3>
     <ul class="list-unstyled">
     {% for topic in topics|sort %}
@@ -65,19 +66,13 @@
     <ul class="list-unstyled">
     {% for kw, count in keywords|sort %}
         <li>
-            <span class="label label-default">{{ count }}</span>
+            <span class="label label-default inline-label">{{ count }}</span>
             <a href="/search/keywords/{{ kw }}" class="icon-right">
                 {{ kw }}
             </a>
         </li>
     {% endfor %}
     </ul>
-
-	<div class="well">
-		<em>
-			<a href="https://twitter.com/bvandemerwe">Tweet me</a> with suggestions for what we should cover next!
-		</em>
-	</div>
 
 {% endmacro %}
 

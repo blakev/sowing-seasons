@@ -6,6 +6,7 @@ import psutil
 from jinja2 import Environment, FileSystemLoader, TemplateNotFound
 from markdown import markdown
 from markdown.extensions.fenced_code import FencedCodeExtension
+from pyatom import AtomFeed
 from tornado import web
 
 from summer.ext.search import document_slug
@@ -18,6 +19,31 @@ fn_markdown = lambda x: markdown(x, extensions=[FencedCodeExtension()])
 fn_split = lambda x, y: str(x).split(y)
 fn_strip = lambda x: str(x).strip()
 
+def calculate_pagination(res, max_pages=5):
+    """ Returns a list of `int`s representing page numbers
+        to display at the bottom of a search results page.
+    """
+    res = DotDict(res)
+
+    # fewer pages than the allowed, return a list
+    # with a slot for each
+    if res.page_total < max_pages:
+        return range(1, res.page_total + 1)
+
+    # towards the end of the pages, we only want to
+    # include the `max_pages`
+    if res.page_number >= res.page_total - max_pages:
+        return range(res.page_total - max_pages, res.page_total + 1)
+
+    # somewhere in the middle
+    if max_pages % 2 == 0: # even max pages
+        half_page = (max_pages / 2)
+        return range(res.page_number - half_page - 1, res.page_number + half_page)
+
+    else: # odd max pages
+        half_page = (max_pages // 2)
+        return range(res.page_number - half_page, res.page_number + half_page)
+
 def datetime_format(value, format='%m-%d-%Y'):
     return value.strftime(format)
 
@@ -28,6 +54,7 @@ def get_system_load():
         'sys': 'python ' + sys.version.split('(')[0] + sys.platform
     }
 
+
 class TemplateRender(object):
     """ Class to hold HTML template rendering methods. """
 
@@ -36,6 +63,7 @@ class TemplateRender(object):
         env = Environment(loader=FileSystemLoader([template_path]))
 
         # filters
+        env.filters['calculate_pagination'] = calculate_pagination
         env.filters['datetime_format'] = datetime_format
         env.filters['highlight'] = code_highlighter
         env.filters['markdown'] = fn_markdown
@@ -56,10 +84,8 @@ class BaseHandler(web.RequestHandler, TemplateRender):
         super(BaseHandler, self).__init__(application, request, **kwargs)
         self._meta = None
 
-
     def get_current_user(self):
         return self.get_secure_cookie('user_id', None)
-
 
     def render_html(self, name, **kwargs):
         kwargs.update({
@@ -75,18 +101,15 @@ class BaseHandler(web.RequestHandler, TemplateRender):
             'xsrf_form_html': self.xsrf_form_html })
         self.write(self.render_template(name, **kwargs))
 
-
     def get_keywords(self, posts, most_common=20):
         keywords = Counter()
         # extract the most common keywords for the side bar
         for post in posts.results:
             keywords.update([x.strip() for x in post.get('keywords', '').split(',')])
-        return keywords.most_common(most_common)
-
+        return keywords.most_common(None)
 
     def get_topics(self, posts):
         return sorted(list(set(post.get('topic', None) for post in posts.results)))
-
 
     @property
     def meta(self):
@@ -98,3 +121,40 @@ class BaseHandler(web.RequestHandler, TemplateRender):
     def this_url(self):
         return '{}://{}{}'.format(
             self.meta.settings.protocol, self.meta.settings.domain, self.request.uri)
+
+    @staticmethod
+    def generate_feed(posts, subtitle='', url="https://sowingseasons.com/feed.atom"):
+        feed = AtomFeed(
+            title="SowingSeasons",
+            title_type="text",
+            subtitle="takes awhile to grow anything. %s" % subtitle,
+            subtitle_type="text",
+            feed_url=url,
+            url="https://sowingseasons.com",
+            author="Blake VandeMerwe",
+            icon="sowingseasons.com/static/img/ico_black.png",
+            logo="sowingseasons.com/static/img/logo.png",
+            rights="MIT LICENSE",
+            rights_type="text",
+            generator=("PyAtom", "https://github.com/sramana/pyatom", "1.4")
+        )
+
+        for post in posts.results:
+            post = DotDict(post)
+
+            feed.add(
+                title=post.title,
+                title_type="text",
+                content=fn_markdown(post.content),
+                content_type="html",
+                summary=post.summary,
+                summary_type="text",
+                url='https://sowingseasons.com' + document_slug(post),
+                updated=post.modified,
+                author="Blake VandeMerwe",
+                published=post.modified,
+                rights="MIT LICENSE",
+                rights_type="text"
+            )
+
+        return feed.to_string()
