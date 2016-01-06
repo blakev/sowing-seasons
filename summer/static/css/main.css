@@ -28,7 +28,7 @@ div.post-content {
 }
 
 div.post-link-title {
-
+    padding-bottom: 0.5em;
 }
 
 div.post-link-header {
@@ -152,4 +152,9 @@ p.post-summary {
     text-align: left;
     display: inline-block;
     width: 160px;
+}
+
+.inline-label {
+    display: inline-block;
+    min-width: 36px;
 }

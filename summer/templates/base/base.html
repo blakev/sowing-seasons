@@ -78,12 +78,12 @@
 
     <div class="container-fluid main-area">
         <div class="row">
-            <div class="col-sm-6 col-sm-offset-1 main-content">
-                {% block content %}
+            <div class="col-sm-3 col-sm-push-8 col-xs-12 navigation-pane">
+                {% block navigation %}
                 {% endblock %}
             </div>
-            <div class="col-sm-3 navigation-pane">
-                {% block navigation %}
+            <div class="col-sm-7 col-sm-pull-3 col-sm-offset-1 col-xs-12 main-content">
+                {% block content %}
                 {% endblock %}
             </div>
         </div>
