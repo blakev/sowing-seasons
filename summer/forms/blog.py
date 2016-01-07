@@ -1,4 +1,4 @@
-from wtforms.fields import StringField, HiddenField, TextAreaField
+from wtforms.fields import StringField, HiddenField, TextAreaField, FileField
 from wtforms.validators import DataRequired
 from wtforms_tornado import Form
 
@@ -9,3 +9,5 @@ class BlogPostForm(Form):
     title = StringField('Title', validators=[DataRequired()])
     summary = TextAreaField('Summary', validators=[DataRequired()])
     content = TextAreaField('Content', validators=[DataRequired()])
+
+    banner = FileField('Article Banner')

@@ -16,6 +16,7 @@ def make_app(**settings):
     cwd = os.getcwd()
 
     TORNADO_CONFIG.update(settings)
+    app_settings = DotDict(APP_CONFIG)
 
     # determine where our flat assets are stored
     static_path = os.path.join(cwd, 'static')
@@ -39,6 +40,7 @@ def make_app(**settings):
         url(r'/blog/([a-z]+)/(\d+)/(\d+)/(.*)/(\d+)', BlogHandler),
         # catch-all routes
         url(r'/static/(.*)', StaticFileHandler, {'path': static_path}),
+        url(r'/media/(.*)', StaticFileHandler, {'path': app_settings.media}),
         url(r'/', IndexHandler),
     ], **TORNADO_CONFIG)
 
@@ -64,7 +66,6 @@ def make_app(**settings):
     app.meta.username_combo = (username, password,)
 
     # callback settings for launching the server
-    app_settings = DotDict(APP_CONFIG)
     app.meta.settings = app_settings
 
     return app, app_settings

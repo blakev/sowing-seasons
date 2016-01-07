@@ -1,3 +1,6 @@
+import os
+import uuid
+
 from tornado import gen
 from tornado.web import authenticated
 
@@ -22,6 +25,22 @@ class AdminCreateHandler(BaseHandler):
             'content': self.get_argument('content'),
             'topic': self.get_argument('topic').lower()
         })
+
+        banner_file = self.request.files.get('banner', None)
+
+        # there was a file upload with this post
+        if banner_file:
+            for f in banner_file:
+                short_name = uuid.uuid4().hex[:8]
+                orig_extension = f.get('filename', 'Unknown.jpg').split('.')[-1]
+                new_name = 'upload_%s.%s' % (short_name, orig_extension)
+                new_folder = os.path.join(self.meta.settings.media, str(by_id))
+                if not os.path.exists(new_folder):
+                    os.makedirs(new_folder)
+                new_location = os.path.join(new_folder, new_name)
+                with open(new_location, 'wb') as out_file:
+                    out_file.write(f.get('body', None))
+                fields['statics'] = os.path.join(str(by_id), new_name)
 
         redirect_url = '/admin/create'
         is_delete = fields['title'] in ('', None,)

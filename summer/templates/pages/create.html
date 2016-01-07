@@ -41,7 +41,7 @@
     </div>
 
     <div class="col-sm-8">
-        <form action="/admin/create" method="post" class="form">
+        <form enctype="multipart/form-data" action="/admin/create" method="post" class="form">
             {{ csrf }}
 
             {% if not new_doc %}
