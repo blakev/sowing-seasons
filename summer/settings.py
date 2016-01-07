@@ -28,9 +28,8 @@ SEO_VALUES = {
     },
 
     'img': r'/static/img/profile.jpg',
-    'referral': {
-        'digital_ocean': 'https://www.digitalocean.com/?refcode=70ebeb6d7781'
-    }
+
+    'run_analytics': not DEBUG
 }
 
 TORNADO_CONFIG = {
