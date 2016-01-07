@@ -8,7 +8,7 @@
 {% block content %}
 	<ol class="breadcrumb">
 		<li><a href="/">Home</a></li>
-		<li><a href="/search/topic/{{ post.topic }}/">{{ post.topic }}</a></li>
+		<li><a href="/search/topic/{{ post.topic }}">{{ post.topic }}</a></li>
 		<li>Blog Post</li>
 	</ol>
 
@@ -28,7 +28,7 @@
 			<ul class="list-unstyled">
 				<li>
 					<i class="fa fa-code icon-column"></i>
-					<a class="btn btn-xs btn-link value-column" href="/search/topic/{{ post.topic }}/">{{ post.topic }}</a>
+					<a class="btn btn-xs btn-link value-column" href="/search/topic/{{ post.topic }}">{{ post.topic }}</a>
 					<i class="fa fa-hashtag icon-column"></i>
 					{{- do_keywords(post) }}
 				</li>
