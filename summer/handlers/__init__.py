@@ -109,6 +109,7 @@ class BaseHandler(web.RequestHandler, TemplateRender):
             'seo': self.meta.seo,
             'settings': self.settings,
             'this_url': self.this_url,
+            'this_url_raw': self.this_url.split('?')[0],
             'xsrf_token': self.xsrf_token,
             'xsrf_form_html': self.xsrf_form_html })
         self.write(self.render_template(name, **kwargs))

@@ -3,6 +3,8 @@
 #
 # Created by: Blake on 1/3/2016 at 5:20 PM
 
+import logging
+
 from tornado import gen
 
 from whoosh.qparser import QueryParser
@@ -11,9 +13,15 @@ from summer.ext.search import clean_results, document_slug
 from summer.ext.search.queries import get_one_document, documents_last_month
 from summer.handlers import BaseHandler
 
+logger = logging.getLogger(__name__)
+
 class BlogHandler(BaseHandler):
     @gen.coroutine
     def get(self, topic, year, month, slug, post_uuid):
+        printable_view = self.get_arguments('printable')
+
+        logger.info(printable_view)
+
         idx = self.meta.search_index
 
         meta_post, related_posts = yield get_one_document(idx, post_uuid)
@@ -26,7 +34,8 @@ class BlogHandler(BaseHandler):
 
         else:
             meta, post = meta_post, meta_post.results[0]
-            self.render_html('pages/blog_post.html', post=post, meta=meta, related=related_posts)
+            self.render_html('pages/blog_post.html',
+                     post=post, meta=meta, related=related_posts, printable=printable_view)
 
 
 class OldBlogHandler(BaseHandler):

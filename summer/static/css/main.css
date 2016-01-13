@@ -158,3 +158,12 @@ p.post-summary {
     display: inline-block;
     min-width: 36px;
 }
+
+p.page-post-summary {
+    padding-left: 4em;
+    padding-right: 2em;
+    padding-bottom: 1.5em;
+    font-style: italic;
+    font-size: 110%;
+    font-family: times;
+}

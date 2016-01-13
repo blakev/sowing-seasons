@@ -1,4 +1,9 @@
-{% extends "base/base.html" %}
+{% if printable %}
+	{% extends "base/base-printable.html" %}
+{% else %}
+	{% extends "base/base.html" %}
+{% endif %}
+
 {% from "base/_macros.html" import do_keywords %}
 
 {% block title %}
@@ -6,11 +11,13 @@
 {% endblock %}
 
 {% block content %}
+	{% if not printable %}
 	<ol class="breadcrumb">
 		<li><a href="/">Home</a></li>
 		<li><a href="/search/topic/{{ post.topic }}">{{ post.topic }}</a></li>
 		<li>Blog Post</li>
 	</ol>
+	{% endif %}
 
 	<div class="row">
 		<div class="col-xs-1">
@@ -40,7 +47,7 @@
 				</li>
 				<li>
 					<i class="fa fa-commenting icon-column"></i>
-					<a class="value-column" href="{{ this_url }}#disqus_thread">Comments</a>
+					<a class="value-column" href="{{ this_url_raw }}#disqus_thread">Comments</a>
 				</li>
 			{% if current_user %}
 				<li><a href="/admin/create?post_id={{ post.uuid }}">Edit</a></li>
@@ -49,12 +56,25 @@
 		</div>
 	</div>
 
+	{% if not printable %}
+	<div class="text-right">
+		<small>
+			<a href="?printable">Print</a> <i class="fa fa-print icon-right"></i>
+		</small>
+	</div>
+	{% endif %}
+
 	<div class="row">
 		<div class="col-xs-12 post-content">
-			{{ post.content|markdown }}
+			<p class="page-post-summary">
+				{{ post.summary }}
+			</p>
+
+			{{ post.content|markdown|safe }}
 		</div>
 	</div>
 
+	{% if not printable %}
 	<div class="row">
 		<div class="col-xs-12">
 			<h3><i class="fa fa-asterisk icon-left"></i>Related</h3>
@@ -107,4 +127,5 @@
 	</div>
 
 	<script id="dsq-count-scr" src="//sowingseasons.disqus.com/count.js" async></script>
+	{% endif %}
 {% endblock %}
