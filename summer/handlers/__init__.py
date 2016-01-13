@@ -1,5 +1,6 @@
 import os
 import sys
+import uuid
 import logging
 from collections import Counter
 
@@ -94,7 +95,14 @@ class BaseHandler(web.RequestHandler, TemplateRender):
 
     def __init__(self, application, request, **kwargs):
         super(BaseHandler, self).__init__(application, request, **kwargs)
+        self._reqid = str(uuid.uuid4()).split('-')[0]
         self._meta = None
+
+    def on_finish(self):
+        logger.info('%s=%s' % (self._reqid, self.request.connection.context.remote_ip))
+        logger.info('%s, requested: %s' % (self._reqid, self.this_url))
+        logger.info('%s, took: %fs' % (self._reqid,
+              round(self.request._finish_time - self.request._start_time, 3)))
 
     def get_current_user(self):
         return self.get_secure_cookie('user_id', None)

@@ -20,8 +20,6 @@ class BlogHandler(BaseHandler):
     def get(self, topic, year, month, slug, post_uuid):
         printable_view = self.get_arguments('printable')
 
-        logger.info(printable_view)
-
         idx = self.meta.search_index
 
         meta_post, related_posts = yield get_one_document(idx, post_uuid)
