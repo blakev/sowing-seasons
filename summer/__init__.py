@@ -1,5 +1,7 @@
 import os
 import json
+import logging
+import logging.config
 
 from tornado.web import Application, StaticFileHandler, url
 
@@ -11,12 +13,19 @@ from summer.handlers.search import DynamicSearchHandler, StaticSearchHandler
 from summer.settings import TORNADO_CONFIG, WHOOSH, APP_CONFIG, SEO_VALUES
 from summer.utils import DotDict
 
-def make_app(**settings):
+logger = logging.getLogger(__name__)
 
+def make_app(**settings):
     cwd = os.getcwd()
 
     TORNADO_CONFIG.update(settings)
     app_settings = DotDict(APP_CONFIG)
+
+    # setup the logging configuration
+    logging.config.dictConfigClass(app_settings.logging).configure()
+
+    logger.info('cwd, ' + cwd)
+    logger.info('creating application')
 
     # determine where our flat assets are stored
     static_path = os.path.join(cwd, 'static')
@@ -44,6 +53,8 @@ def make_app(**settings):
         url(r'/', IndexHandler),
     ], **TORNADO_CONFIG)
 
+    logger.info('finished setting up HTTP routes')
+
     # storage location for singletons and factory methods
     app.meta = DotDict()
     app.meta.seo = SEO_VALUES
@@ -51,6 +62,8 @@ def make_app(**settings):
     # ~~ config Search
     app.meta.search_index = obtain_index(
         WHOOSH.get('location'), SowingSchema, WHOOSH.get('index_name'))
+
+    logger.info('finished binding to Whoosh index')
 
     # ~~ private settings
     private_settings = json.load(open('PRIVATE_SETTINGS.json', 'r'))
@@ -64,6 +77,8 @@ def make_app(**settings):
 
     app.meta.auth_token = auth.get('token', None)
     app.meta.username_combo = (username, password,)
+
+    logger.info('finished configuring authentication')
 
     # callback settings for launching the server
     app.meta.settings = app_settings
