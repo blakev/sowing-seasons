@@ -1,5 +1,6 @@
 import os
 import sys
+import logging
 from collections import Counter
 
 import psutil
@@ -12,6 +13,8 @@ from tornado import web
 from summer.ext.search import document_slug
 from summer.utils import DotDict
 from summer.utils.fn import code_highlighter
+
+logger = logging.getLogger(__name__)
 
 DEFAULT_TEMPLATE_PATH = os.path.join(os.getcwd(), 'templates')
 
@@ -63,18 +66,27 @@ class TemplateRender(object):
         env = Environment(loader=FileSystemLoader([template_path]))
 
         # filters
-        env.filters['calculate_pagination'] = calculate_pagination
-        env.filters['datetime_format'] = datetime_format
-        env.filters['highlight'] = code_highlighter
-        env.filters['markdown'] = fn_markdown
-        env.filters['slugify'] = document_slug
-        env.filters['split'] = fn_split
-        env.filters['strip'] = fn_strip
+        custom_filters = [
+            ('calculate_pagination', calculate_pagination),
+            ('datetime_format', datetime_format),
+            ('highlight', code_highlighter),
+            ('markdown', fn_markdown),
+            ('slugify', document_slug),
+            ('split', fn_split),
+            ('strip', fn_strip)
+        ]
+
+        for fname, fn in custom_filters:
+            env.filters[fname] = fn
 
         try:
             template = env.get_template(name)
         except TemplateNotFound:
+            logger.error('Could not find template, %s' % name)
             raise TemplateNotFound(name)
+        else:
+            logger.info('render_template(%s)' % name)
+
         return template.render(kwargs)
 
 
@@ -101,16 +113,6 @@ class BaseHandler(web.RequestHandler, TemplateRender):
             'xsrf_form_html': self.xsrf_form_html })
         self.write(self.render_template(name, **kwargs))
 
-    def get_keywords(self, posts, most_common=20):
-        keywords = Counter()
-        # extract the most common keywords for the side bar
-        for post in posts.results:
-            keywords.update([x.strip() for x in post.get('keywords', '').split(',')])
-        return keywords.most_common(None)
-
-    def get_topics(self, posts):
-        return sorted(list(set(post.get('topic', None) for post in posts.results)))
-
     @property
     def meta(self):
         if self._meta is None and hasattr(self.application, 'meta'):
@@ -123,7 +125,21 @@ class BaseHandler(web.RequestHandler, TemplateRender):
             self.meta.settings.protocol, self.meta.settings.domain, self.request.uri)
 
     @staticmethod
+    def get_keywords(posts, most_common=20):
+        keywords = Counter()
+        # extract the most common keywords for the side bar
+        for post in posts.results:
+            keywords.update([x.strip() for x in post.get('keywords', '').split(',')])
+        return keywords.most_common(None)
+
+    @staticmethod
+    def get_topics(posts):
+        return sorted(list(set(post.get('topic', None) for post in posts.results)))
+
+    @staticmethod
     def generate_feed(posts, subtitle='', url="https://sowingseasons.com/feed.atom"):
+        logger.info('generate_feed(%s)' % url)
+
         feed = AtomFeed(
             title="SowingSeasons",
             title_type="text",
@@ -132,8 +148,8 @@ class BaseHandler(web.RequestHandler, TemplateRender):
             feed_url=url,
             url="https://sowingseasons.com",
             author="Blake VandeMerwe",
-            icon="sowingseasons.com/static/img/ico_black.png",
-            logo="sowingseasons.com/static/img/logo.png",
+            icon="/static/img/ico_black.png",
+            logo="/static/img/logo.png",
             rights="MIT LICENSE",
             rights_type="text",
             generator=("PyAtom", "https://github.com/sramana/pyatom", "1.4")
