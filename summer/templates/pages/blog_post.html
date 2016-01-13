@@ -6,6 +6,15 @@
 
 {% from "base/_macros.html" import do_keywords %}
 
+{% macro printable_navbar() %}
+	<div class="row">
+		<div class="col-xs-12 text-center">
+			<a href="javascript: window.history.back();" class="btn btn-link"><i class="fa fa-chevron-left icon-left"></i> Back</a>
+			<a href="/" class="btn btn-link">Home <i class="fa fa-home icon-right"></i></a>
+		</div>
+	</div>
+{% endmacro %}
+
 {% block title %}
 	{{ post.title }} - {{ post.topic }} : SowingSeasons
 {% endblock %}
@@ -62,6 +71,8 @@
 			<a href="?printable">Print</a> <i class="fa fa-print icon-right"></i>
 		</small>
 	</div>
+	{% else %}
+		{{ printable_navbar() }}
 	{% endif %}
 
 	<div class="row">
@@ -127,5 +138,7 @@
 	</div>
 
 	<script id="dsq-count-scr" src="//sowingseasons.disqus.com/count.js" async></script>
+	{% else %}
+		{{ printable_navbar() }}
 	{% endif %}
 {% endblock %}
