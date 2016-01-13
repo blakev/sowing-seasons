@@ -1,5 +1,6 @@
 {% extends "base/base.html" %}
 {% from "base/_macros.html" import post_link, render_navigation %}
+{% from "base/_macros-pagination.html" import this_page_uri, do_pagination %}
 
 {% block title %}
     Home : SowingSeasons
@@ -31,6 +32,10 @@
         {{ post_link(post, bgclass) }}
     {% endfor %}
     </ul>
+
+    {% if posts.page_total > 1 %}
+        {{ do_pagination(posts, request, on_index=True) }}
+    {% endif %}
 {% endblock %}
 
 {% block navigation %}

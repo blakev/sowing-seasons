@@ -12,9 +12,15 @@ from summer.utils import DotDict
 class IndexHandler(BaseHandler):
     @gen.coroutine
     def get(self):
+        # pagination results
+        try:
+            page_number = int(self.get_argument('page', 1))
+        except ValueError:
+            page_number = 1
+
         idx = self.meta.search_index
 
-        posts = yield generic(idx, q=Every())
+        posts = yield generic(idx, q=Every(), page=page_number)
         topics_keywords = yield get_all_topics_and_kw(idx)
 
         return self.render_html('pages/index.html', posts=posts, **topics_keywords)

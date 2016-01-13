@@ -1,0 +1,60 @@
+{% macro this_page_uri(request, page_number=1) -%}
+	{{ request.uri|split('?')|first }}{% if page_number %}?page={{ page_number }}{% endif %}
+{%- endmacro %}
+
+{% macro do_pagination(results, request, klass='', on_index=False) %}
+    {% if on_index %}
+
+    <div class="row">
+        <div class="col-xs-6 text-right">
+            {% if results.page_number > 1 %}
+                <a href="{{ this_page_uri(request, results.page_number - 1) }}" class="btn btn-link">
+                    <i class="fa fa-chevron-left icon-left"></i> Older
+                </a>
+            {% endif %}
+        </div>
+        <div class="col-xs-6">
+            {% if results.page_number < results.page_total %}
+                <a href="{{ this_page_uri(request, results.page_number + 1) }}" class="btn btn-link">
+                    Newer <i class="fa fa-chevron-right icon-right"></i>
+                </a>
+            {% endif %}
+        </div>
+    </div>
+
+    {% else %}
+
+	<div class="row">
+		<div class="col-xs-12">
+			<nav>
+				<ul class="pagination {{ klass }}">
+					{% if results.page_number > 1 %}
+					<li>
+						<a href="{{ this_page_uri(request, results.page_number - 1) }}">
+							<i class="fa fa-chevron-left"></i>
+						</a>
+					</li>
+					{% endif %}
+					{% for p in results|calculate_pagination %}
+						{% if loop.index == results.page_number %}
+					<li class="active">
+						{% else %}
+					<li>
+						{% endif %}
+						<a href="{{ this_page_uri(request, loop.index) }}">{{ loop.index }}</a>
+					</li>
+					{% endfor %}
+					{% if results.page_number < results.page_total %}
+					<li>
+						<a href="{{ this_page_uri(request, results.page_number + 1) }}">
+							<i class="fa fa-chevron-right"></i>
+						</a>
+					</li>
+					{% endif %}
+				</ul>
+			</nav>
+		</div>
+	</div>
+
+    {% endif %}
+{% endmacro %}
