@@ -99,10 +99,12 @@ class BaseHandler(web.RequestHandler, TemplateRender):
         self._meta = None
 
     def on_finish(self):
-        logger.info('%s=%s' % (self._reqid, self.request.connection.context.remote_ip))
+        remote_ip = self.request.headers.get('X-Forwardxed-For', '??')
+        response_time = self.request._finish_time - self.request._start_time
+
+        logger.info('%s=%s' % (self._reqid, remote_ip))
         logger.info('%s, requested: %s' % (self._reqid, self.this_url))
-        logger.info('%s, took: %fs' % (self._reqid,
-              round(self.request._finish_time - self.request._start_time, 3)))
+        logger.info('%s, took: %0.4fs' % (self._reqid, response_time))
 
     def get_current_user(self):
         return self.get_secure_cookie('user_id', None)
