@@ -1,5 +1,5 @@
-private_*
-*PRIVATE_*
+PRIVATE_SETTINGS.json
+local-settings.json
 
 *.idea
 .idea/
