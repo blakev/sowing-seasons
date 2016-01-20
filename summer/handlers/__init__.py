@@ -99,7 +99,7 @@ class BaseHandler(web.RequestHandler, TemplateRender):
         self._meta = None
 
     def on_finish(self):
-        remote_ip = self.request.headers.get('X-Forwarded-For', '??')
+        remote_ip = self.request.headers.get('X-Forwardxed-For', '??')
         response_time = self.request._finish_time - self.request._start_time
 
         logger.info('%s=%s' % (self._reqid, remote_ip))
