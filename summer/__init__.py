@@ -66,7 +66,7 @@ def make_app(**settings):
     logger.info('finished binding to Whoosh index')
 
     # ~~ private settings
-    private_settings = json.load(open('PRIVATE_SETTINGS.json', 'r'))
+    private_settings = app_settings.pop('private_settings', {})
     # bootstrap the private settings into the meta-object accessible
     # in the BaseHandler webRequest class
     app.meta.private = private_settings

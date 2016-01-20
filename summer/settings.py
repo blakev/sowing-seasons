@@ -1,19 +1,32 @@
+import json
+import os
 import uuid
+
+folder, fname = os.path.split(__file__)
 
 def contents_of(f):
     with open(f, 'r') as ins_file:
         contents = ' '.join(ins_file.readlines())
     return contents
 
-DEBUG = True
-CSRF_SECRET = 'blake' # uuid.uuid4().hex
+DEBUG = bool(int(os.environ.get('SOWING_DEBUG', 1))) # True
+CSRF_SECRET = 'mysecretsRsaf3' if DEBUG else uuid.uuid4().hex
+LOCAL_SETTINGS = os.environ.get('SOWING_SETTINGS', None)
+
+if LOCAL_SETTINGS is None:
+    LOCAL_SETTINGS = os.path.join(folder, 'local-settings.json')
+
+    if not os.path.exists(LOCAL_SETTINGS):
+        raise EnvironmentError('no configuration settings `local-settings.py`, %s' % LOCAL_SETTINGS)
+
 
 APP_CONFIG = {
     'port': 8888,
     'host': '127.0.0.1',
     'domain': 'sowingseasons.com',
-    'protocol': 'https', # we don't support HTTP on the WildWildWeb
+    'protocol': 'http' if DEBUG else 'https', # we don't support HTTP on the WildWildWeb
     'media': r'/home/blake/temp/sowing-seasons-media',
+    'private_settings': json.load(open(LOCAL_SETTINGS, 'r')),
     'logging': {
         'version': 1,
         'incremental': False,
