@@ -8,6 +8,7 @@ from summer.forms.blog import BlogPostForm
 from summer.handlers import BaseHandler
 from summer.ext.search import get_default_schema, write_index, update_index
 from summer.ext.search.queries import get_all_documents, get_one_document
+from summer.utils.img import process_banner_file
 
 class AdminCreateHandler(BaseHandler):
     @authenticated
@@ -26,21 +27,21 @@ class AdminCreateHandler(BaseHandler):
             'topic': self.get_argument('topic').lower()
         })
 
+        clear_statics = self.get_arguments('clear_statics') == 'y'
+        clear_banner = self.get_arguments('clear_banner') == 'y'
+
+        if clear_statics:
+            fields['statics'] = None
+
+        if clear_banner:
+            fields['banner'] = None
+
         banner_file = self.request.files.get('banner', None)
 
         # there was a file upload with this post
         if banner_file:
             for f in banner_file:
-                short_name = uuid.uuid4().hex[:8]
-                orig_extension = f.get('filename', 'Unknown.jpg').split('.')[-1]
-                new_name = 'upload_%s.%s' % (short_name, orig_extension)
-                new_folder = os.path.join(self.meta.settings.media, str(by_id))
-                if not os.path.exists(new_folder):
-                    os.makedirs(new_folder)
-                new_location = os.path.join(new_folder, new_name)
-                with open(new_location, 'wb') as out_file:
-                    out_file.write(f.get('body', None))
-                fields['statics'] = os.path.join(str(by_id), new_name)
+                fields['banner'] = process_banner_file(f, self.meta.settings.media, by_id)
 
         redirect_url = '/admin/create'
         is_delete = fields['title'] in ('', None,)

@@ -15,8 +15,20 @@
 	</div>
 {% endmacro %}
 
+{% macro media_files_box() %}
+	<div id="media-floater">
+
+	</div>
+{% endmacro %}
+
 {% block title %}
 	{{ post.title }} - {{ post.topic }} : SowingSeasons
+{% endblock %}
+
+{% block pre_content %}
+	{% if post.banner %}
+		<div id="banner-area" style="background-image: url('/media/{{ post.banner }}') no-repeat top left fixed;"></div>
+	{% endif %}
 {% endblock %}
 
 {% block content %}
@@ -80,6 +92,10 @@
 			<p class="page-post-summary">
 				{{ post.summary }}
 			</p>
+
+			{% if post.statics %}
+				{{ media_files_box() }}
+			{% endif %}
 
 			{{ post.content|markdown|safe }}
 		</div>

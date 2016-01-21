@@ -69,6 +69,19 @@
                     </div>
                 {% endfor %}
 
+                {% if post.statics or post.banner %}
+                    <div class="well">
+                        {% if post.statics %}
+                            <h3>Statics</h3>
+                            {{ post.statics }}
+                        {% endif %}
+                        {% if post.banner %}
+                            <h3>Banner</h3>
+                            {{ post.banner }}
+                        {% endif %}
+                    </div>
+                {% endif %}
+
                 <div class="form-group pull-right">
                     <button type="submit" class="btn btn-success">
                         <i class="fa fa-pencil icon-left"></i>

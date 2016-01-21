@@ -169,5 +169,22 @@ p.page-post-summary {
 }
 
 #media-floater {
-    
+    width: 20%;
+    float: right;
+    padding: 20px;
+    background-color: red;
+}
+
+#banner-area {
+    z-index: 0;
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 240px;
+    background-size: contain;
+}
+
+#banner-area img {
+    overflow-y: hidden;
+    max-height: 240px;
 }

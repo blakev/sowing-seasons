@@ -21,6 +21,8 @@ class SowingSchema(SchemaClass):
         unique=True, stored=True, numtype=int, bits=64, signed=False)
     modified = DATETIME(
         stored=True, sortable=True)
+    banner = ID(
+        stored=True)
     statics = ID(
         stored=True)
     topic = TEXT(
