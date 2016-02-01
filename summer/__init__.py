@@ -44,7 +44,7 @@ def make_app(**settings):
         url(r'/login', LoginHandler),
         url(r'/admin/create', AdminCreateHandler),
         url(r'/search', DynamicSearchHandler),
-        url(r'/search/([a-z0-9]+)/([a-z0-9]+)(\.atom)?', StaticSearchHandler),
+        url(r'/search/([a-z0-9_]+)/([a-zA-Z0-9\+\-_\%]+)(\.atom)?', StaticSearchHandler),
         url(r'/blog/([a-zA-Z0-9\-_]+)\.html', OldBlogHandler),
         url(r'/blog/([a-z]+)/(\d+)/(\d+)/(.*)/(\d+)', BlogHandler),
         # catch-all routes

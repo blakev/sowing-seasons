@@ -12,9 +12,9 @@ def process_banner_file(f, media_path=None, by_id='', max_height=240):
 
     short_name = uuid.uuid4().hex[:8]
 
-    orig_extension = f.get('filename', 'Unknown.jpg').split('.')[-1]
+    # orig_extension = f.get('filename', 'Unknown.jpg').split('.')[-1]
 
-    new_name = 'upload_%s.%s' % (short_name, orig_extension)
+    new_name = 'upload_%s.jpg' % (short_name)
 
     if not os.path.exists(new_folder):
         os.makedirs(new_folder)
