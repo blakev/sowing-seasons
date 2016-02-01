@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 
 from tornado import gen
 from whoosh.query import Every, DateRange
-from whoosh.qparser import MultifieldParser, OrGroup, QueryParser
+from whoosh.qparser import MultifieldParser, OrGroup, QueryParser, WildcardPlugin
 from whoosh.qparser.dateparse import DateParserPlugin
 from whoosh.sorting import MultiFacet
 
@@ -40,7 +40,8 @@ def get_one_document(idx, by_id=None):
 
 @gen.coroutine
 def documents_last_year(idx):
-    pass
+    posts = yield generic(idx, qs="modified:-365 days to now")
+    return posts
 
 @gen.coroutine
 def documents_last_month(idx):
@@ -48,16 +49,17 @@ def documents_last_month(idx):
     return posts
 
 @gen.coroutine
-def generic(idx, qs=None, q=None, limit=10, parser=None, page=1):
+def generic(idx, qs=None, q=None, limit=5, parser=None, page=1):
     if qs is q is None:
         raise ValueError('cannot have a null querystring and query')
 
     if parser is None:
         parser = MultifieldParser(
-                ['title', 'keywords', 'summary', 'content'], idx.schema, group=OrGroup)
+                ['title', 'keywords', 'summary', 'content', 'author'], idx.schema, group=OrGroup)
 
     # add better date parsing support
     parser.add_plugin(DateParserPlugin())
+    parser.remove_plugin_class(WildcardPlugin)
 
     with idx.searcher() as search:
         # generate the Query object
