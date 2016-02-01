@@ -42,7 +42,9 @@
 
 	<div class="row">
 		<div class="col-xs-1">
-			<h2><i class="fa fa-file-text-o icon-left"></i></h2>
+			{% set icon = post.pmeta.icon or 'fa-file-text-o' %}
+
+			<h2><i class="fa {{ icon }} icon-left"></i></h2>
 		</div>
 		<div class="col-xs-10">
 			<h2>
@@ -61,12 +63,17 @@
 					{{- do_keywords(post) }}
 				</li>
 				<li>
-					<i class="fa fa-at icon-column"></i>
-					<a class="value-column" href="mailto: {{ seo.author_email }}">{{ seo.author_name }}</a>
-					<i class="fa fa-calendar-o icon-column"></i>
-					<div class="value-column">{{ post.modified|datetime_format }}</div>
+					<i class="fa fa-calendar-check-o icon-column"></i>
+					<div class="value-column">created, {{ post.created|datetime_format }}</div>
+					<i class="fa fa-calendar-plus-o icon-column"></i>
+					<div class="value-column">updated, {{ post.modified|datetime_format }}</div>
 				</li>
 				<li>
+					<i class="fa fa-at icon-column"></i>
+					<a class="value-column" href="mailto: {{ seo.author_email }}">{{ seo.author_name }}</a>
+				</li>
+				<li>
+					<br>
 					<i class="fa fa-commenting icon-column"></i>
 					<a class="value-column" href="{{ this_url_raw }}#disqus_thread">Comments</a>
 				</li>

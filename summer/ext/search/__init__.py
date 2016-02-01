@@ -1,5 +1,6 @@
 import re
 import os
+import json
 import datetime
 import logging
 from uuid import uuid4
@@ -19,8 +20,20 @@ IGNORE_WORDS = []
 class SowingSchema(SchemaClass):
     uuid = NUMERIC(
         unique=True, stored=True, numtype=int, bits=64, signed=False)
+
+    # -- Findable data
+    author = TEXT(
+        stored=True, sortable=True, field_boost=1.1)
+    pmeta = ID(  # JSON-serializable meta data such as icons and pictures
+        stored=True)
+
+    # -- Dates
     modified = DATETIME(
         stored=True, sortable=True)
+    created = DATETIME(
+        stored=True, sortable=True)
+
+    # -- Article Things
     banner = ID(
         stored=True)
     statics = ID(
@@ -94,6 +107,20 @@ def clean_results(idx, results, query=None):
         # fields/columns that didn't exist in the original schema.
         res = dict(default_document)
         res.update(doc.items())
+
+        # convert the pmeta string (json) into a dict object
+        try:
+            m = '{}' if doc['pmeta'] is None else doc['pmeta']
+            m = json.loads(m)
+        except Exception as e:
+            m = {}
+        finally:
+            res['pmeta'] = m
+
+        # ensure we have a created date
+        if res['created'] is None:
+            res['created'] = res['modified']
+
         ret.append(res)
 
     metadata.results = ret
@@ -106,12 +133,12 @@ def get_default_schema(schema, uuid=None, modified_date=None):
         uuid = int(str(uuid4().int)[:8])
 
     if modified_date is None:
-        modified = datetime.datetime.utcnow()
+        modified_date = datetime.datetime.utcnow()
 
     ret_schema = dict().fromkeys(schema._fields)
 
     ret_schema['uuid'] = uuid
-    ret_schema['modified'] = modified
+    ret_schema['modified'] = modified_date
 
     return ret_schema
 
@@ -138,6 +165,10 @@ def document_slug(document):
 def write_index(idx, **fields):
     try:
         writer = idx.writer()
+
+        # set the created and modified dates
+        fields['modified'] = fields['created'] = datetime.datetime.utcnow()
+
         writer.add_document(**fields)
         writer.commit()
         success = True
@@ -151,6 +182,10 @@ def write_index(idx, **fields):
 def update_index(idx, is_delete=False, **fields):
     try:
         writer = idx.writer()
+
+        # update modified by
+        fields['modified'] = datetime.datetime.utcnow()
+
         if is_delete:
             writer.delete_by_term('uuid', fields.get('uuid'))
         else:

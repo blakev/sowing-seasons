@@ -10,22 +10,31 @@ from summer.ext.search import get_default_schema, write_index, update_index
 from summer.ext.search.queries import get_all_documents, get_one_document
 from summer.utils.img import process_banner_file
 
+FIELDS = ['title', 'topic', 'keywords', 'summary', 'content', 'pmeta']
+LOWER_FIELDS = ['topic', 'keywords']
+
 class AdminCreateHandler(BaseHandler):
     @authenticated
     @gen.coroutine
     def post(self):
         by_id = self.get_argument('post_id', None)
-
         idx = self.meta.search_index
 
-        fields = get_default_schema(idx.schema)
-        fields.update({
-            'title': self.get_argument('title'),
-            'keywords': self.get_argument('keywords').lower(),
-            'summary': self.get_argument('summary'),
-            'content': self.get_argument('content'),
-            'topic': self.get_argument('topic').lower()
-        })
+        if by_id:
+            # updating document
+            post, _ = yield get_one_document(self.meta.search_index, by_id=by_id)
+            fields = post.results[0]
+        else:
+            # document doesn't exist, potentially
+            fields = get_default_schema(idx.schema)
+
+        # clean missing fields
+        if fields['pmeta'] is None: fields['pmeta'] = '{}'
+        if fields['created'] is None: fields['created'] = fields['modified']
+
+        fields.update({f:self.get_argument(f) for f in FIELDS})
+        for f in LOWER_FIELDS:
+            fields[f] = fields[f].lower()
 
         clear_statics = self.get_arguments('clear_statics') == 'y'
         clear_banner = self.get_arguments('clear_banner') == 'y'
@@ -77,11 +86,10 @@ class AdminCreateHandler(BaseHandler):
             post, _ = yield get_one_document(self.meta.search_index, by_id=by_id)
             post = post.results[0]
             if post:
-                form.title.data = post['title']
-                form.topic.data = post['topic']
-                form.keywords.data = post['keywords']
-                form.summary.data = post['summary']
-                form.content.data = post['content']
+
+                for f in FIELDS:
+                    getattr(form, f, f).data = post[f]
+
         else:
             post = None
 
