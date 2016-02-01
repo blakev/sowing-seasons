@@ -27,7 +27,7 @@
 
 {% block pre_content %}
 	{% if post.banner %}
-		<div id="banner-area" style="background-image: url('/media/{{ post.banner }}') no-repeat top left fixed;"></div>
+		<img id="banner-area" src="/media/{{ post.banner }}" alt="">
 	{% endif %}
 {% endblock %}
 
