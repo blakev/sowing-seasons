@@ -195,3 +195,15 @@ p.page-post-summary {
 .navigation-pane {
 
 }
+
+h2.results-header {
+    margin-bottom: 1em;
+}
+
+h2.results-header .row {
+    padding-top: 0.75em;
+}
+
+h2.results-header div {
+    font-size: 85%;
+}
