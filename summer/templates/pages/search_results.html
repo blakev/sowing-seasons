@@ -13,16 +13,22 @@
 		<li>{{ term }}</li>
     </ol>
 
-	<h2>
+	<h2 class="results-header">
 		<i class="fa fa-search icon-column-search"></i>Search Results
-		<br>
 		<small>
-            <i class="fa fa-terminal icon-column-search"></i>Query: <i>{{ results.query }}</i>
-            <br>
-            <small>
-	            <i class="fa fa-clock-o icon-column-search"></i>Took: {{ results.search_time }} secs.
-            </small>
-        </small>
+		<div class="row">
+			<div class="col-xs-1"><i class="fa fa-star icon-column-search"></i></div>
+			<div class="col-xs-8"><i>{{ term }}</i></div>
+		</div>
+		<div class="row">
+			<div class="col-xs-1"><i class="fa fa-terminal icon-column-search"></i></div>
+			<div class="col-xs-8"><code>{{ results.query }}</code></div>
+		</div>
+		<div class="row">
+			<div class="col-xs-1"><i class="fa fa-clock-o icon-column-search"></i></div>
+			<div class="col-xs-8">{{ results.search_time }} secs.</div>
+		</div>
+		</small>
 	</h2>
 
 	<div class="row">
@@ -43,9 +49,11 @@
 	{% endfor %}
 	</ul>
 
-	{% if results.page_total > 1 %}
-		{{ do_pagination(results) }}
-	{% endif %}
+	<div class="text-center">
+		{% if results.page_total > 1 %}
+			{{ do_pagination(results, request) }}
+		{% endif %}
+	</div>
 {% endblock %}
 
 {% block navigation %}
