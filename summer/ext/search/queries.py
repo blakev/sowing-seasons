@@ -36,6 +36,11 @@ def get_one_document(idx, by_id=None):
         q = QueryParser('uuid', idx.schema).parse(by_id)
         results = search.search(q)
         related = results[0].more_like_this('keywords', top=3, numterms=10)
+        if len(related.top_n) == 0:
+            # if we can't find anything with related keywords, we want
+            # to extend our search into the content with lots of possible terms.
+            # the goal is to have 3 related articles...
+            related = results[0].more_like_this('content', top=3, numterms=80)
         return clean_results(idx, results), clean_results(idx, related)
 
 @gen.coroutine
