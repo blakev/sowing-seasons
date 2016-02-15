@@ -1,4 +1,5 @@
 falcon==0.3.0
+htmlmin==0.1.10
 Jinja2==2.8
 Markdown==2.6.5
 MarkupSafe==0.23
