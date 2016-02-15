@@ -4,6 +4,7 @@ import uuid
 import logging
 from collections import Counter
 
+import htmlmin
 import psutil
 from jinja2 import Environment, FileSystemLoader, TemplateNotFound
 from markdown import markdown
@@ -88,7 +89,15 @@ class TemplateRender(object):
         else:
             logger.info('render_template(%s)' % name)
 
-        return template.render(kwargs)
+        page_html = template.render(kwargs)
+        o_len = len(page_html)
+
+        # compress HTML repsonse
+        if self.settings.get('compress_response', False):
+            page_html = htmlmin.minify(page_html, remove_comments=True, keep_pre=True)
+            logger.info('compressed html %0.2f percent of original' % ((len(page_html) / float(o_len))*100))
+
+        return page_html
 
 
 class BaseHandler(web.RequestHandler, TemplateRender):

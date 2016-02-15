@@ -1,8 +1,14 @@
+falcon==0.3.0
+htmlmin==0.1.10
 Jinja2==2.8
 Markdown==2.6.5
 MarkupSafe==0.23
+Pillow==3.1.0
 psutil==3.3.0
 pyatom==1.4
+python-mimeparse==0.1.4
+simplejson==3.8.1
+six==1.10.0
 tornado==4.3
 wheel==0.26.0
 Whoosh==2.7.0
