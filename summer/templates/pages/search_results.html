@@ -37,7 +37,11 @@
 			<a href="{{ this_page_uri(results.page_total) }}">{{ results.page_total }}</a>
 		</div>
 		<div class="col-xs-6 text-right">
-			Showing {{ results.offset + 1 }}-{{ results.offset + results.pagelen }} of {{ results.count }}
+			{% if results.count > 0 %}
+				Showing {{ results.offset + 1 }}-{{ results.offset + results.pagelen }} of {{ results.count }}
+			{% else %}
+				Showing 0 of 0
+			{% endif %}
 			<a href="{{ this_url_raw }}.atom"><i class="fa fa-rss"></i></a>
 		</div>
 	</div>

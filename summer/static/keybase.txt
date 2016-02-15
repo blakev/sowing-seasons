@@ -1,0 +1,68 @@
+==================================================================
+https://keybase.io/blakev
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of https://sowingseasons.com
+  * I am blakev (https://keybase.io/blakev) on keybase.
+  * I have a public key with fingerprint E3B1 28F0 8A95 AAE9 8848  9EDE 5F45 7ACC AE59 619A
+
+To do so, I am signing this object:
+
+{
+    "body": {
+        "key": {
+            "eldest_kid": "0101356e092624ace4d6c2df1a37f3abb6dcfe7de827c05b0bd79f371b713d8891230a",
+            "fingerprint": "e3b128f08a95aae988489ede5f457accae59619a",
+            "host": "keybase.io",
+            "key_id": "5f457accae59619a",
+            "kid": "0101356e092624ace4d6c2df1a37f3abb6dcfe7de827c05b0bd79f371b713d8891230a",
+            "uid": "155294e119199ac63ffcf717da5d8219",
+            "username": "blakev"
+        },
+        "service": {
+            "hostname": "sowingseasons.com",
+            "protocol": "https:"
+        },
+        "type": "web_service_binding",
+        "version": 1
+    },
+    "ctime": 1455574972,
+    "expire_in": 157680000,
+    "prev": "56f78c6e04b6088c65cfbe08cb43a68fb636cef54ad4169438eb25dc402c7d4c",
+    "seqno": 15,
+    "tag": "signature"
+}
+
+which yields the signature:
+
+-----BEGIN PGP MESSAGE-----
+Version: Keybase OpenPGP v2.0.51
+Comment: https://keybase.io/crypto
+
+yMItAnicrVJbSBVBGD7HS+oh7WIJRRdYKzLMdnZ3dnblEJy0ogvYSz6UdZqZndVN
+2z2d3eMlTQolJKTwPChYEEEXwoJ6CINKKsNQ6UL3IIUKiiJJkC5EYbNibz02LzPz
+/9/3zfd/zN3s1EAomM7A8OaiC2PB4dsnEoHyO2U3GgXiGA1CcaNQzaY2VmMw14tW
+W4ZQLIhABDJUmahLqqRgyhRDpZJhAiwjU8aEqAY1GTKYJiEqQiISA+mmjABBQDY0
+TQeSLGKhUDAtu5LFY3HL9rgskwmQNFPUsA4xZrqmKZrODAZNBSJMKWZQV4HuE6sc
+12dwcwS7rMhyeI1folP2/oH/z74TU3IAQklXGAA60HVMVdk0qYkAMjA0NAnoPtBl
+cRvvYxxNanA1qxUOFgq8VmtR5sfqzzHdd506nobLsOvYbhF19nF6LO54DnVqeLvK
+82JusU/3GmI+vo6R6LRSlFi2wcmcUcviruXYQjHgSOpZvjRQIIRI0ZFUKLD6mBVn
+UctHQKRqIl/+O9wZD041kUZ5PgpRRY2fIDUJEzVKFBmrmklUWaXMhAo2FKDqiqwx
+IkGDKqJEkaFQwZ9tv+342twnrvTHsipt7CXiTDh451ZFWiAYCsxIT/H/WCCUNfvv
+z3u7IGOyApWXPAQfz/ym6x5vbbJzPnwGV1aNbri4K2PifFnd7vzeldvXoKpzoYdr
+ciaGvCdlG/OuDaWP1A/nLTnZvvZJK30wZ8XP5Zvc51ua2su6Cvo7j346vCPcdyNy
+YG/fov6rHZ9y4PrJxQWP6k+/bFMiP8bhi5SX11tuZj/LfHfq8bZZhT32SEokObMm
+1176q7ou+XbWluOpwrzu8PvJba/zr2auHki25mbulJaND2al5Zaf/XCpY/P91MuZ
+qLRq4nt7ItJzbDQVhGsvvFL7Buf3NL1R9177dqi7qwR+vtLcEg5GcpPBxj3tR3Ke
+L2r+0uV19j69l91W8vX0QL755fvchedKx8b/AElCP1g=
+=HUHl
+-----END PGP MESSAGE-----
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/blakev
+
+==================================================================

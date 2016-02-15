@@ -33,12 +33,15 @@ def process_banner_file(f, media_path=None, by_id='', max_height=240):
     # crop to CSS height
     width, height = img.size
 
-    img = img.resize((min(1080, int(width*.5)), max(max_height, int(height*.5))), Image.ANTIALIAS)
+    new_width = 1080
+    new_height = int((new_width / float(width)) * height)
+
+    img = img.resize((new_width, new_height), Image.ANTIALIAS)
 
     width, height = img.size
 
-    img = img.crop((0, height - max_height, width, height))
+    img = img.crop((0, 0, width, int(new_height * 0.25)))
 
-    img.save(new_location, quality=35, optimize=True)
+    img.save(new_location, quality=85, optimize=True)
 
     return os.path.join(str(by_id), new_name)
