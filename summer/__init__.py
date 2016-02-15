@@ -37,8 +37,6 @@ def make_app(**settings):
     # set up our routing configuration
     app = Application([
         # hard routes
-        url(r'/favicon.ico', StaticFileHandler, {'path': os.path.join(static_path, 'favicon.ico')}),
-        url(r'/robots.txt', StaticFileHandler, {'path': os.path.join(static_path, 'robots.txt')}),
         url(r'/feed.atom', AtomFeedHandler),
         # soft routes
         url(r'/login', LoginHandler),
@@ -50,6 +48,7 @@ def make_app(**settings):
         # catch-all routes
         url(r'/static/(.*)', StaticFileHandler, {'path': static_path}),
         url(r'/media/(.*)', StaticFileHandler, {'path': app_settings.media}),
+        url(r'/(.*\.(txt|ico))', StaticFileHandler, {'path': static_path}),
         url(r'/', IndexHandler),
     ], **TORNADO_CONFIG)
 
