@@ -41,12 +41,12 @@
 	{% endif %}
 
 	<div class="row">
-		<div class="col-xs-1">
+		<div class="col-sm-1">
 			{% set icon = post.pmeta.icon or 'fa-file-text-o' %}
 
 			<h2><i class="fa {{ icon }} icon-left"></i></h2>
 		</div>
-		<div class="col-xs-10">
+		<div class="col-sm-10">
 			<h2>
 				{{ post.title }}
 			</h2>
@@ -54,7 +54,7 @@
 	</div>
 
 	<div class="row">
-		<div class="col-xs-8">
+		<div class="col-sm-8">
 			<ul class="list-unstyled">
 				<li>
 					<i class="fa fa-code icon-column"></i>
@@ -95,7 +95,7 @@
 	{% endif %}
 
 	<div class="row">
-		<div class="col-xs-12 post-content">
+		<div class="col-sm-12 post-content">
 			<p class="page-post-summary">
 				{{ post.summary }}
 			</p>
@@ -110,14 +110,14 @@
 
 	{% if not printable %}
 	<div class="row">
-		<div class="col-xs-12">
+		<div class="col-sm-12">
 			<h3><i class="fa fa-asterisk icon-left"></i>Related</h3>
 		</div>
 	</div>
 
 	<div class="row">
 		{% for rel in related.results %}
-			<div class="col-xs-4">
+			<div class="col-sm-4">
 				<div class="well">
 					<h4>
 						<a href="{{ rel|slugify }}">{{ rel.title|truncate(30) }}</a>
@@ -134,13 +134,13 @@
 	</div>
 
 	<div class="row">
-		<div class="col-xs-12">
+		<div class="col-sm-12">
 			<h3><i class="fa fa-comments-o icon-left"></i>Comments</h3>
 		</div>
 	</div>
 
 	<div class="row">
-		<div class="col-xs-12">
+		<div class="col-sm-12">
 			<div id="disqus_thread"></div>
 			<script>
 				var disqus_config = function () {
