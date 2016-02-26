@@ -7,7 +7,7 @@ from tornado.web import Application, StaticFileHandler, url
 
 from summer.ext.search import SowingSchema, obtain_index, get_default_schema
 from summer.handlers.blog import BlogHandler, OldBlogHandler
-from summer.handlers.core import AtomFeedHandler, IndexHandler, LoginHandler
+from summer.handlers.core import AtomFeedHandler, IndexHandler, LoginHandler, ErrorHandler
 from summer.handlers.create import AdminCreateHandler
 from summer.handlers.search import DynamicSearchHandler, StaticSearchHandler
 from summer.settings import TORNADO_CONFIG, WHOOSH, APP_CONFIG, SEO_VALUES
@@ -50,6 +50,7 @@ def make_app(**settings):
         url(r'/media/(.*)', StaticFileHandler, {'path': app_settings.media}),
         url(r'/(.*\.(txt|ico))', StaticFileHandler, {'path': static_path}),
         url(r'/', IndexHandler),
+        url(r'/(.*)', ErrorHandler)
     ], **TORNADO_CONFIG)
 
     logger.info('finished setting up HTTP routes')
