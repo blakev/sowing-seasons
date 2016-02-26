@@ -9,6 +9,12 @@ from summer.forms.user import LoginForm
 from summer.handlers import BaseHandler, fn_markdown
 from summer.utils import DotDict
 
+class ErrorHandler(BaseHandler):
+    @gen.coroutine
+    def get(self, path):
+        return self.render_html('base/_error.html', path=path)
+
+
 class IndexHandler(BaseHandler):
     @gen.coroutine
     def get(self):
