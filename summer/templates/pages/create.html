@@ -26,9 +26,11 @@
             {% for result in all_posts.results %}
                 {% set display = '[' ~ result.uuid ~ ']' if result.title is none else result.title %}
                 <li>
-                    {{ result.modified.strftime('%m-%d, %Y') }}
-                    <br>
-                    <a href="/admin/create?post_id={{ result.uuid }}">{{ display }}</a>
+                    <a href="/admin/create?post_id={{ result.uuid }}">
+                        {{ result.modified.strftime('%m-%d, %Y') }}
+                        <br>
+                        {{ display }}
+                    </a>
                 </li>
             {% endfor %}
         {% endif %}
@@ -65,9 +67,18 @@
                 {% endif %}
 
                 {% for field in form %}
-                    <div class="form-group">
+                    {% set has_errors = form.errors.get(field.name) %}
+                    <div class="form-group {% if has_errors %}has-error{% endif %}">
                         {{ field.label(class="control-label") }}
+                        {% if has_errors %}
+                        <ul>
+                            {% for err in has_errors %}
+                                <li class="text-danger">{{ err }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
                         {{ field(class="form-control") }}
+                        {{ field.description }}
                     </div>
                 {% endfor %}
 

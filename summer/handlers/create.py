@@ -1,5 +1,6 @@
 import os
 import uuid
+import logging
 
 from tornado import gen
 from tornado.web import authenticated
@@ -13,10 +14,21 @@ from summer.utils.img import process_banner_file
 FIELDS = ['title', 'topic', 'keywords', 'summary', 'content', 'pmeta']
 LOWER_FIELDS = ['topic', 'keywords']
 
+logger = logging.getLogger(__name__)
+
 class AdminCreateHandler(BaseHandler):
     @authenticated
     @gen.coroutine
     def post(self):
+        # validate the form
+        form = BlogPostForm(self.request.arguments)
+
+        if not form.validate():
+            self.set_status(400)
+            logger.error(form.errors)
+            self.get(form)
+            return
+
         by_id = self.get_argument('post_id', None)
         idx = self.meta.search_index
 
@@ -53,7 +65,7 @@ class AdminCreateHandler(BaseHandler):
                 fields['banner'] = process_banner_file(f, self.meta.settings.media, by_id)
 
         redirect_url = '/admin/create'
-        is_delete = fields['title'] in ('', None,)
+        is_delete = fields['title'] in ('DELETE',)
 
         if by_id:
             fields['uuid'] = by_id
@@ -75,12 +87,14 @@ class AdminCreateHandler(BaseHandler):
 
     @authenticated
     @gen.coroutine
-    def get(self):
+    def get(self, form=None):
         # are we looking at a single document, or a list of documents?
         by_id = self.get_argument('post_id', None)
 
         all_posts = yield get_all_documents(self.meta.search_index)
-        form = BlogPostForm()
+
+        if form is None:
+            form = BlogPostForm()
 
         if by_id:
             post, _ = yield get_one_document(self.meta.search_index, by_id=by_id)
@@ -95,4 +109,5 @@ class AdminCreateHandler(BaseHandler):
 
         new_doc = by_id is None
 
-        self.render_html('pages/create.html', all_posts=all_posts, new_doc=new_doc, form=form, post=post)
+        self.render_html('pages/create.html', all_posts=all_posts, new_doc=new_doc,
+                         form=form, post=post, errors=form.errors)
