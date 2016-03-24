@@ -65,7 +65,7 @@ class AdminCreateHandler(BaseHandler):
                 fields['banner'] = process_banner_file(f, self.meta.settings.media, by_id)
 
         redirect_url = '/admin/create'
-        is_delete = fields['title'] in ('', None,)
+        is_delete = fields['title'] in ('DELETE',)
 
         if by_id:
             fields['uuid'] = by_id
