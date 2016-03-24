@@ -65,8 +65,16 @@
                 {% endif %}
 
                 {% for field in form %}
-                    <div class="form-group">
+                    {% set has_errors = form.errors.get(field.name) %}
+                    <div class="form-group {% if has_errors %}has-error{% endif %}">
                         {{ field.label(class="control-label") }}
+                        {% if has_errors %}
+                        <ul>
+                            {% for err in has_errors %}
+                                <li class="text-danger">{{ err }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% endif %}
                         {{ field(class="form-control") }}
                     </div>
                 {% endfor %}
